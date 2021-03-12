@@ -60,7 +60,7 @@
             $_SESSION["manager"]=$user;
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();
-            $_SESSION['expire'] = $_SESSION['start'] + (10 * 60);
+            $_SESSION['expire'] = $_SESSION['start'] + (10 * 100);
             // header("Location: ../pages/manager.php");
             exit();
 
@@ -80,7 +80,7 @@
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();
             $_SESSION['expire'] = $_SESSION['start'] + (10 * 60);
-            header("Location: ../pages/employee.php");
+            header("Location: ../../index1.html");
             exit();
 
         } else {
@@ -94,5 +94,8 @@
         echo "<br><a href ='../../index.php'> Volver a intentarlo</a>";
         exit();
     }
+    //cierro conexion
+    mysqli_close($conexion); 
+
 
 ?>
