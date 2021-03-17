@@ -27,7 +27,7 @@
             <!-- creacion del input password -->
             <input type="password" placeholder="Contraseña" name="password" id="password" required>
             <i class="fa fa-key"></i>
-            <a href="err/index.html">He olvidado mi contraseña</a>
+            <a href="pages/examples/forgot-password-v2.html">He olvidado mi contraseña</a>
             <!-- creacion del boton submit -->
             <button type="submit" name="submit">
                 <i class="spinner"></i>

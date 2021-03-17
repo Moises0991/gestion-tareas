@@ -47,7 +47,8 @@ img {
   background: #f9f6f1;
   display: flex;
   align-items: center;
-  justify-content: center; }
+  justify-content: center; 
+}
 
 .wizard {
   width: 920px;

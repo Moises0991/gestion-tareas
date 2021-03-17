@@ -1,12 +1,13 @@
+<!-- validacion de usuario -->
 <?php
-    //Recibimos las dos variables
     $user=$_POST["username"];
     $password=$_POST["password"];
 
     try {
 
+
         // se establece la conexion
-        include '../data/config.php';
+        include '../../login/data/config.php';
         $conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
 
         // se preparan consultas de usuario
@@ -22,7 +23,6 @@
     }
 
     if ($conection -> connect_error) {
-        include '../data/install.php';
         // die("La conexion fallo: " . $conexion -> connect_error);
     }
 
@@ -66,7 +66,7 @@
 
         } else {
             echo 'usuario y contraseña incorrectos';
-            echo "<br><a href ='../../index.php'> Volver a intentarlo</a>";
+            echo "<br><a href ='lockscreen.php'> Volver a intentarlo</a>";
             exit();
         }
 
@@ -85,17 +85,15 @@
 
         } else {
             echo 'usuario y contraseña incorrectos';
-            echo "<br><a href ='../../index.php'> Volver a intentarlo</a>";
+            echo "<br><a href ='lockscreen.php'> Volver a intentarlo</a>";
             exit();
         }
 
     } else {
         echo 'usuario y contraseña incorrectos';
-        echo "<br><a href ='../../index.php'> Volver a intentarlo</a>";
+            echo "<br><a href ='lockscreen.php'> Volver a intentarlo</a>";
         exit();
     }
     //cierro conexion
     mysqli_close($conexion); 
-
-
 ?>

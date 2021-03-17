@@ -11,6 +11,7 @@ CREATE TABLE managers (
   pass_user VARCHAR(50) NOT NULL,
   user_age INT(2) UNSIGNED NOT NULL, 
   email VARCHAR(30) NOT NULL,
+  phone BIGINT(55) UNSIGNED NOT NULL, 
   avatar varchar(255) NOT NULL,
   current_session int(11) NOT NULL,
   online int(11) NOT NULL,
@@ -20,8 +21,8 @@ CREATE TABLE managers (
   update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
-INSERT INTO managers (username, surnames, pass_user, user_age, email, avatar, current_session, online) values ('moises', 'soler zetina', 'soler', '21', 'moises0991@gmail.com', 'user1.jpg', 2,1);
-INSERT INTO managers (username, surnames, pass_user, user_age, email, avatar, current_session, online) values ('ramona', 'salazar mendiola', 'ramona', '21', 'ramona@gmail.com', 'user2.jpg', 1,1);
+INSERT INTO managers (username, surnames, pass_user, user_age, email, phone, avatar, current_session, online) values ('moises', 'soler zetina', 'soler', '21', 'moises0991@gmail.com', '9981584073','user1.jpg', 2,1);
+INSERT INTO managers (username, surnames, pass_user, user_age, email, phone, avatar, current_session, online) values ('ramona', 'salazar mendiola', 'ramona', '21', 'ramona@gmail.com', '9988391319','user2.jpg', 1,1);
 
 
 CREATE TABLE employees (
@@ -32,12 +33,14 @@ CREATE TABLE employees (
     pass_user VARCHAR(50) NOT NULL,
     user_age INT(2) UNSIGNED NOT NULL, 
     email VARCHAR(30) NOT NULL,
+    phone BIGINT(55) UNSIGNED NOT NULL, 
+    avatar varchar(255) NOT NULL,
     -- TIMESTAMP es un tipo de dato que contiene fecha y hora
     -- La función CURRENT_TIMESTAMP devuelve la fecha y la hora local actual 
     create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 );
-INSERT INTO employees (username, surnames, pass_user, user_age, email) values ('raul', 'cordoba medina', '071e89d6430e8321624257dd60cf80e6', '22', 'raul@gmail.com');
+INSERT INTO employees (username, surnames, pass_user, user_age, email, phone, avatar) values ('raul', 'cordoba medina', 'raul', '22', 'raul@gmail.com', '9981497748','user1.jpg');
 
 
 -- creacion de tablas para chat
@@ -89,10 +92,6 @@ ALTER TABLE `chat_login_details`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
-
-
-
-----------------------------  tablas tareas ---------------------------------------
 
 
 CREATE TABLE tareas_asignadas (
