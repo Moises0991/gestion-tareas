@@ -2,7 +2,7 @@
 session_start();
 include('header.php');
 ?>
-<title>Sistema de chat en vivo con Ajax, PHP y MySQL</title>
+<title>Chat</title>
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
 <link href="css/style.css" rel="stylesheet" id="bootstrap-css">
 <script src="js/chat.js"></script>
@@ -12,9 +12,8 @@ include('header.php');
     margin: 30px auto;	
 }
 </style>
-<?php include('container.php');?>
 <div class="container">		
-	<h1>Sistema de chat en vivo con Ajax, PHP y MySQL</h1>		
+	<h1>Chat en vivo</h1>		
 	<br>		
 
 	<!-- se evalua si ha una sesion iniciada -->
@@ -165,7 +164,6 @@ include('header.php');
 	<br>
 	<br>	
 	<div style="margin:50px 0px 0px 0px;">
-		<a class="btn btn-default read-more" style="background:#3399ff;color:white" href="http://www.baulphp.com/sistema-de-chat-en-vivo-con-ajax-php-y-mysql">Volver al Tutorial</a>		
 	</div>	
 </div>	
 <!---------------------------------------- fin div container ------------------------------------------>

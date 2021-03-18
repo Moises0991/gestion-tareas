@@ -79,7 +79,7 @@
             $_SESSION["employee"]=$user;
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();
-            $_SESSION['expire'] = $_SESSION['start'] + (1*5);
+            $_SESSION['expire'] = $_SESSION['start'] + (1*60);
             header("Location: ../../index1.php");
             exit();
 

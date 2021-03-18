@@ -10,7 +10,7 @@
   } else {
     // se refresca la sesion
     $_SESSION['start'] = time();
-    $_SESSION['expire'] = $_SESSION['start'] + (1*5);
+    $_SESSION['expire'] = $_SESSION['start'] + (1*60);
   }
 ?>
 <!DOCTYPE html>
