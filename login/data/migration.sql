@@ -93,7 +93,7 @@ ALTER TABLE `chat_login_details`
 COMMIT;
 
 
-
+-- creacion de tareas
 CREATE TABLE tareas_asignadas (
   -- UNSIGNED sirve para permitir solo valores positivos (sin signo)
   id INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
@@ -101,17 +101,14 @@ CREATE TABLE tareas_asignadas (
   id_usuario INT(12) NOT NULL,
   descripcion_tarea VARCHAR(50) NOT NULL,
   importancia_tarea VARCHAR(20)  NOT NULL, 
+  estado_tarea varchar(10) NOT null, 
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  fecha_expira VARCHAR(10) NOT NULL,
-  archivo LONGBLOB,
+  fecha_expira date,
+  hora_expira time,
+  archivo varchar(100),
 
   update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   constraint fk_id_usuario foreign KEY (id_usuario)
     REFERENCES employees(id)
 );
-
-INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea, fecha_expira) VALUES ('test_tarea1',1,'test para asignarle una tarea al usuario 1 test','importante','2021-10-2');
-INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea, fecha_expira) VALUES ('test_tarea2',1,'test para asignarle una tarea al usuario 1 test','urgente','2021-01-2');
-INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea, fecha_expira) VALUES ('test_tarea3',2,'test para asignarle una tarea al usuario 2 moises','importante','2021-10-2');
-INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea, fecha_expira) VALUES ('test_tarea4',2,'test para asignarle una tarea al usuario 2 moises','normal','2021-11-2');

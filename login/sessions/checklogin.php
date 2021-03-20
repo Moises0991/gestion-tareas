@@ -76,6 +76,7 @@
         
         if ($password == $row['pass_user']) {
             session_start();
+            $_SESSION['id_employee'] = $row['id'];
             $_SESSION["employee"]=$user;
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();

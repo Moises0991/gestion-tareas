@@ -170,7 +170,7 @@
                         
                     <div class="col-sm-6">
                     <label>Hora en la que expira:</label>
-                      <input class="form-control" type="time" name="hora_termina" min="<?=escapar($hoy["hours"]);?>:<?=escapar($hoy["minutes"]);?>" max="00:00" step="" />
+                      <input class="form-control" type="time" name="hora_termina" min="<?=escapar($hoy["hours"]);?>:<?=escapar($hoy["minutes"]);?>"  step="" />
                           </div>
                          
                  </div>

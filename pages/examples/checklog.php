@@ -77,6 +77,7 @@
         if ($password == $row['pass_user']) {
             session_start();
             $_SESSION["employee"]=$user;
+            $_SESSION['id_employee'] = $row['id'];
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();
             $_SESSION['expire'] = $_SESSION['start'] + (1*60);
