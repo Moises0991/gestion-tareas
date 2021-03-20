@@ -148,20 +148,20 @@
 
                   <div class="form-group">
                     <label>Fecha de la creacion</label>
-                    <input type="text" class="form-control">" disabled>
+                    <input type="text" class="form-control" placeholder="<?=escapar($hoy["mday"]);?>-0<?=escapar($hoy["mon"]);?>-<?=escapar($hoy["year"]);?>" disabled>
                   </div>
 
                   <div class="row ">
                     <div class="col-sm-6">
                     <div class="form-group">
                        <label>Fecha en la que expira:</label>
-                           <input class="form-control" type="date"   name="fecha_expira">
+                           <input class="form-control" type="date" min="<?=escapar($hoy["year"]);?>-0<?=escapar($hoy["mon"]);?>-<?=escapar($hoy["mday"]);?>"  name="fecha_expira">
                           </div>
                           </div>
                         
                     <div class="col-sm-6">
                     <label>Hora en la que expira:</label>
-                      <input class="form-control" type="time" name="hora_termina" />
+                      <input class="form-control" type="time" name="hora_termina" min="<?=escapar($hoy["hours"]);?>:<?=escapar($hoy["minutes"]);?>" max="00:00" step="" />
                           </div>
                          
                  </div>
