@@ -1,43 +1,50 @@
 <?php
-  session_start();
   include 'modulos/forms/funciones.php';
-
+  session_start();
   $now = time();
 
+  // evaluacion de tiempo en sesion
   if($now > $_SESSION['expire']) {
-    echo 'se termino la sesion';
     header('Location: pages/examples/lockscreen.php');
     exit;
   } else {
-    // se refresca la sesion
     $_SESSION['start'] = time();
-    $_SESSION['expire'] = $_SESSION['start'] + (1*100);
+    $_SESSION['expire'] = $_SESSION['start'] + (5*60);
   }
 
-  $config = include 'modulos/config.php';
-   
-  $dns = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-  // a continuacion se crea la variable con el pdo que servira para la conexion a la base de datos
-  $conexion = new PDO ($dns, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
 
-  $consultaSQL = "SELECT count(*) total FROM employees";
-  $sentencia = $conexion -> prepare($consultaSQL);
-  $sentencia -> execute();
-  $tareas = $sentencia -> fetch(PDO::FETCH_ASSOC);
-  $id = $_SESSION["id_employee"];
+  if (isset($_SESSION['manager'])) {
+    $user = $_SESSION['manager'] .' ' . $_SESSION['surnames'];
 
-  $tipo_tarea = array("Normal", "Alta", "Urgente", "inmediata");
-  for ($i = 0; $i <= 3; $i++) {
-    $tipo_a = $tipo_tarea[$i];
-    $consultaSQL1 = "SELECT count(*) total FROM tareas_asignadas where id_usuario = $id and importancia_tarea = '$tipo_a' ";
-    $sentencia1 = $conexion -> prepare($consultaSQL1);
-    $sentencia1 -> execute();
-    $tarea1 = $sentencia1 -> fetch(PDO::FETCH_ASSOC);
-if($i==0){$tipo_normal = $tarea1["total"];}
-if($i==1){$tipo_alta = $tarea1["total"];}
-if($i==2){$tipo_urgente = $tarea1["total"];}
-if($i==3){$tipo_inmediata = $tarea1["total"];}
-} 
+  } else if (isset($_SESSION['employee'])) {
+    $user = $_SESSION['employee'] .' ' . $_SESSION['surnames'];
+  
+    // conexion
+    $config = include 'modulos/config.php';
+    $dns = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
+    $conexion = new PDO ($dns, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+
+    // consulta
+    $consultaSQL = "SELECT count(*) total FROM employees";
+    $sentencia = $conexion -> prepare($consultaSQL);
+    $sentencia -> execute();
+
+    $tareas = $sentencia -> fetch(PDO::FETCH_ASSOC);
+    $id = $_SESSION["id_employee"];
+
+    $tipo_tarea = array("Normal", "Alta", "Urgente", "inmediata");
+    for ($i = 0; $i <= 3; $i++) {
+      $tipo_a = $tipo_tarea[$i];
+      $consultaSQL1 = "SELECT count(*) total FROM tareas_asignadas where id_usuario = $id and importancia_tarea = '$tipo_a' ";
+      $sentencia1 = $conexion -> prepare($consultaSQL1);
+      $sentencia1 -> execute();
+      $tarea1 = $sentencia1 -> fetch(PDO::FETCH_ASSOC);
+      if($i==0){$tipo_normal = $tarea1["total"];}
+      if($i==1){$tipo_alta = $tarea1["total"];}
+      if($i==2){$tipo_urgente = $tarea1["total"];}
+      if($i==3){$tipo_inmediata = $tarea1["total"];}
+    } 
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -209,7 +216,7 @@ if($i==3){$tipo_inmediata = $tarea1["total"];}
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block" style="text-transform: capitalize;"><?= 'bienvenido ' . $_SESSION['employee']?></a>
+          <a href="pages/examples/profile.php" class="d-block" style="text-transform: capitalize;"><?=$user?></a>
         </div>
       </div>
 
@@ -396,6 +403,9 @@ if($i==3){$tipo_inmediata = $tarea1["total"];}
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+      <?php 
+        if (isset($_SESSION['employee'])) {
+      ?>
         <!-- Small boxes (Stat box) -->
         <div class="row ">
         
@@ -438,19 +448,16 @@ if($i==3){$tipo_inmediata = $tarea1["total"];}
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="modulos/forms/tareas.php" class="small-box-footer" style="color: white">Ver mas<i class="fas fa-arrow-circle-right"></i></a>
+              <a href="modulos/forms/tareas.php" class="small-box-footer">Ver mas<i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
-
-
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
                 <h3><?= escapar($tipo_inmediata); ?></h3>
-
                 <p>Tareas inmediatas</p>
               </div>
               <div class="icon">
@@ -462,6 +469,76 @@ if($i==3){$tipo_inmediata = $tarea1["total"];}
           <!-- ./col -->
         </div>
         <!-- /.row -->
+      <?php
+        } else if (isset($_SESSION['manager'])) {
+      ?>
+                <!-- Small boxes (Stat box) -->
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3>150</h3>
+
+                <p>New Orders</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+                <p>Bounce Rate</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3>44</h3>
+
+                <p>User Registrations</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <h3>65</h3>
+
+                <p>Unique Visitors</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+        </div>
+        <!-- /.row -->
+      <?php
+        }
+      ?>
         <!-- Main row -->
         <div class="row">
           <!-- Left col -->
@@ -703,6 +780,76 @@ if($i==3){$tipo_inmediata = $tarea1["total"];}
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
+            <!-- USERS LIST -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Usuarios</h3>
+
+                <div class="card-tools">
+                  <span class="badge badge-success">Conectados</span>
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <ul class="users-list clearfix">
+                  <li>
+                    <img src="dist/img/user1-128x128.jpg" alt="User Image">
+                    <a class="users-list-name" href="#">Alexander Pierce</a>
+                    <span class="users-list-date">Today</span>
+                  </li>
+                  <li>
+                    <img src="dist/img/user8-128x128.jpg" alt="User Image">
+                    <a class="users-list-name" href="#">Norman</a>
+                    <span class="users-list-date">Yesterday</span>
+                  </li>
+                  <li>
+                    <img src="dist/img/user7-128x128.jpg" alt="User Image">
+                    <a class="users-list-name" href="#">Jane</a>
+                    <span class="users-list-date">12 Jan</span>
+                  </li>
+                  <li>
+                    <img src="dist/img/user6-128x128.jpg" alt="User Image">
+                    <a class="users-list-name" href="#">John</a>
+                    <span class="users-list-date">12 Jan</span>
+                  </li>
+                  <li>
+                    <img src="dist/img/user2-160x160.jpg" alt="User Image">
+                    <a class="users-list-name" href="#">Alexander</a>
+                    <span class="users-list-date">13 Jan</span>
+                  </li>
+                  <li>
+                    <img src="dist/img/user5-128x128.jpg" alt="User Image">
+                    <a class="users-list-name" href="#">Sarah</a>
+                    <span class="users-list-date">14 Jan</span>
+                  </li>
+                  <li>
+                    <img src="dist/img/user4-128x128.jpg" alt="User Image">
+                    <a class="users-list-name" href="#">Nora</a>
+                    <span class="users-list-date">15 Jan</span>
+                  </li>
+                  <li>
+                    <img src="dist/img/user3-128x128.jpg" alt="User Image">
+                    <a class="users-list-name" href="#">Nadia</a>
+                    <span class="users-list-date">15 Jan</span>
+                  </li>
+                </ul>
+                <!-- /.users-list -->
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer text-center">
+                <a href="javascript:">Ver todos los usuarios</a>
+              </div>
+              <!-- /.card-footer -->
+            </div>
+          <?php 
+            if (isset($_SESSION['manager'])){
+          ?>
             <div class="card direct-chat direct-chat-primary">
               <div class="card-header">
                 <h3 class="card-title">Chat directo</h3>
@@ -902,73 +1049,9 @@ if($i==3){$tipo_inmediata = $tarea1["total"];}
               </div>
               <!-- /.card-footer-->
             </div>
-            <!-- USERS LIST -->
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Empleados</h3>
-
-                <div class="card-tools">
-                  <span class="badge badge-danger">8 New Members</span>
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body p-0">
-                <ul class="users-list clearfix">
-                  <li>
-                    <img src="dist/img/user1-128x128.jpg" alt="User Image">
-                    <a class="users-list-name" href="#">Alexander Pierce</a>
-                    <span class="users-list-date">Today</span>
-                  </li>
-                  <li>
-                    <img src="dist/img/user8-128x128.jpg" alt="User Image">
-                    <a class="users-list-name" href="#">Norman</a>
-                    <span class="users-list-date">Yesterday</span>
-                  </li>
-                  <li>
-                    <img src="dist/img/user7-128x128.jpg" alt="User Image">
-                    <a class="users-list-name" href="#">Jane</a>
-                    <span class="users-list-date">12 Jan</span>
-                  </li>
-                  <li>
-                    <img src="dist/img/user6-128x128.jpg" alt="User Image">
-                    <a class="users-list-name" href="#">John</a>
-                    <span class="users-list-date">12 Jan</span>
-                  </li>
-                  <li>
-                    <img src="dist/img/user2-160x160.jpg" alt="User Image">
-                    <a class="users-list-name" href="#">Alexander</a>
-                    <span class="users-list-date">13 Jan</span>
-                  </li>
-                  <li>
-                    <img src="dist/img/user5-128x128.jpg" alt="User Image">
-                    <a class="users-list-name" href="#">Sarah</a>
-                    <span class="users-list-date">14 Jan</span>
-                  </li>
-                  <li>
-                    <img src="dist/img/user4-128x128.jpg" alt="User Image">
-                    <a class="users-list-name" href="#">Nora</a>
-                    <span class="users-list-date">15 Jan</span>
-                  </li>
-                  <li>
-                    <img src="dist/img/user3-128x128.jpg" alt="User Image">
-                    <a class="users-list-name" href="#">Nadia</a>
-                    <span class="users-list-date">15 Jan</span>
-                  </li>
-                </ul>
-                <!-- /.users-list -->
-              </div>
-              <!-- /.card-body -->
-              <div class="card-footer text-center">
-                <a href="javascript:">Ver todos los usuarios</a>
-              </div>
-              <!-- /.card-footer -->
-            </div>
+          <?php 
+            }
+          ?>
           </section>
           <!-- right col -->
         </div>
@@ -1012,90 +1095,5 @@ if($i==3){$tipo_inmediata = $tarea1["total"];}
 <script src="dist/js/adminlte.js"></script>
 <script src="dist/js/demo.js"></script>
 <script src="dist/js/pages/dashboard.js"></script>
-<!-- <script src="../../plugins/jquery/jquery.min.js"></script>
-<script src="../../plugins/uplot/uPlot.iife.min.js"></script>
-<script src="dist/js/adminlte.min.js"></script> -->
-<!-- <script>
-  $(function () {
-    /* uPlot
-    * -------
-    * Here we will create a few charts using uPlot
-    */
-
-    function getSize(elementId) {
-      return {
-        width: document.getElementById(elementId).offsetWidth,
-        height: document.getElementById(elementId).offsetHeight,
-      }
-    }
-
-    let data = [
-      [0, 1, 2, 3, 4, 5, 6],
-      [28, 48, 40, 19, 86, 27, 90],
-      [65, 59, 80, 81, 56, 55, 40]
-    ];
-
-    //--------------
-    //- AREA CHART -
-    //--------------
-
-    const optsAreaChart = {
-      ... getSize('areaChart'),
-      scales: {
-        x: {
-          time: false,
-        },
-        y: {
-          range: [0, 100],
-        },
-      },
-      series: [
-        {},
-        {
-          fill: 'rgba(60,141,188,0.7)',
-          stroke: 'rgba(60,141,188,1)',
-        },
-        {
-          stroke: '#c1c7d1',
-          fill: 'rgba(210, 214, 222, .7)',
-        },
-      ],
-    };
-
-    let areaChart = new uPlot(optsAreaChart, data, document.getElementById('areaChart'));
-
-    const optsLineChart = {
-      ... getSize('lineChart'),
-      scales: {
-        x: {
-          time: false,
-        },
-        y: {
-          range: [0, 100],
-        },
-      },
-      series: [
-        {},
-        {
-          fill: 'transparent',
-          width: 5,
-          stroke: 'rgba(60,141,188,1)',
-        },
-        {
-          stroke: '#c1c7d1',
-          width: 5,
-          fill: 'transparent',
-        },
-      ],
-    };
-
-    let lineChart = new uPlot(optsLineChart, data, document.getElementById('lineChart'));
-
-    window.addEventListener("resize", e => {
-      areaChart.setSize(getSize('areaChart'));
-      lineChart.setSize(getSize('lineChart'));
-    });
-  })
-</script> -->
 </body>
 </html>

@@ -50,6 +50,7 @@ try {
 // termina 
 
 ?>        
+<!-- logica conexiones -->
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -123,6 +124,7 @@ try {
                 </div>
               </div>
               <!-- /.card-header -->
+              <!-- apartir de aqui borras y pegas la nueva tabla -->
               <div class="card-body p-0">
                 <table class="table">
                   <thead>
@@ -159,6 +161,19 @@ try {
                                             break;
 
                                      }
+                                    //  if (($fila['fecha_expira'] != "2021-03-18")  )
+                                    //    {
+                                    //       $id_tarea = escapar($fila["id"]);
+                                    //     $consultaSQL1 = "UPDATE  tareas_asignadas SET
+                                    //    estado_tarea = 'Expirada'
+                                    //     WHERE id = $id_tarea";
+                                    //     $sentencia = $conexion -> prepare($consultaSQL1);
+                                    //     $sentencia -> execute();
+
+
+
+                                    //    }
+
                                     switch ($fila['estado_tarea'])
                                     {
                                         case "Por hacer":
@@ -174,6 +189,7 @@ try {
                                               break;
 
                                               case "Expirada":
+                                                $estado="badge bg-danger";
 
                                                 break;
 
@@ -183,7 +199,8 @@ try {
                                     <!-- lo que se viene a continuacion no es codigo php y, sirve para que se vallan mostrando las filas con la informacion que hay
                                     en el array $fila (que fila es una posicion de la tabla alumnos [por lo tanto alumnos es $sentencia]) -->
                                   
-                                    <tr>
+                                    <tr >
+                                      <!-- aqui muestra el nuemro de la tarea -->
                                         <td><?php echo escapar($i);?></td>
                                         <td><?=escapar($fila["nombre_tarea"]);?></td>
                                         <td ><span style=" margin-left: 15px;"class="<?=escapar($estilo);?>"><?=escapar($fila["importancia_tarea"]);?></span></td>

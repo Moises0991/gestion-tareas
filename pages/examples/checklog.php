@@ -5,7 +5,6 @@
 
     try {
 
-
         // se establece la conexion
         include '../../login/data/config.php';
         $conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
@@ -36,8 +35,14 @@
         
         if ($password == $row['pass_user']) {
             session_start();
+            $_SESSION["manager"] = $user;
+            $_SESSION["surnames"] = $row['surnames'];
+            $_SESSION['loggedin'] = true;
+            $_SESSION['start'] = time();
+            $_SESSION['expire'] = $_SESSION['start'] + (5*60);
+            header("Location: ../../index1.php");
+            // exit();
 
-            ///////////////////// aqui comienza parte del chat ////////////////////////////////
             include ('../../chat/Chat.php');
             $chat = new Chat();
             $user = $chat->loginUsers($_POST['username'], $_POST['password']);	
@@ -51,19 +56,9 @@
                 $chat->updateUserOnline($user[0]['userid'], 1);
                 $lastInsertId = $chat->insertUserLoginDetails($user[0]['userid']);
                 $_SESSION['login_details_id'] = $lastInsertId;
-                header("Location: ../../chat/index.php");
             } else {
                 $loginError = "Usuario y Contraseña invalida";
             };
-            ///////////////////// aqui termina parte del chat ////////////////////////////////
-
-            $_SESSION["manager"]=$user;
-            $_SESSION['loggedin'] = true;
-            $_SESSION['start'] = time();
-            $_SESSION['expire'] = $_SESSION['start'] + (5*60);
-            // header("Location: ../pages/manager.php");
-            exit();
-
         } else {
             echo 'usuario y contraseña incorrectos';
             echo "<br><a href ='lockscreen.php'> Volver a intentarlo</a>";
@@ -76,11 +71,12 @@
         
         if ($password == $row['pass_user']) {
             session_start();
-            $_SESSION["employee"]=$user;
             $_SESSION['id_employee'] = $row['id'];
+            $_SESSION["employee"]=$user;
+            $_SESSION["surnames"] = $row['surnames'];
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();
-            $_SESSION['expire'] = $_SESSION['start'] + (1*60);
+            $_SESSION['expire'] = $_SESSION['start'] + (5*60);
             header("Location: ../../index1.php");
             exit();
 
@@ -92,7 +88,7 @@
 
     } else {
         echo 'usuario y contraseña incorrectos';
-            echo "<br><a href ='lockscreen.php'> Volver a intentarlo</a>";
+        echo "<br><a href ='lockscreen.php'> Volver a intentarlo</a>";
         exit();
     }
     //cierro conexion

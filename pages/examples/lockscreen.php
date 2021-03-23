@@ -1,24 +1,33 @@
 <!-- uso de cookies -->
 <?php
-  if(isset($_COOKIE['use']))
+  if(isset($_COOKIE['username']))
   { 
-    $username = $_COOKIE['use']; 
+    $username = $_COOKIE['username']; 
   } 
+
+  if(isset($_COOKIE['user']))
+  { 
+    $user = $_COOKIE['user']; 
+  } 
+
 ?>
 
 <!-- se guarda el nombre del usuario -->
 <?php
   session_start();
   if (isset($_SESSION['manager'])){
-    $username= $_SESSION['manager'];
-    setcookie('use', $username); 
+    $username = $_SESSION['manager'] . ' ' . $_SESSION['surnames'];
+    $user = $_SESSION['manager'];
+    setcookie('username', $username); 
+    setcookie('user', $user); 
   } else if (isset($_SESSION['employee'])){
-    $username= $_SESSION['employee'];
-    setcookie('use', $username); 
+    $username = $_SESSION['employee'] . ' ' . $_SESSION['surnames'];
+    $user = $_SESSION['employee'];
+    setcookie('username', $username); 
+    setcookie('user', $user); 
   }
   session_destroy();
 ?>
-
 
 <!-- comienzo del html -->
 <!DOCTYPE html>
@@ -39,7 +48,7 @@
       height: 100%;
     }
     body {
-     color: whitesmoke;
+    color: whitesmoke;
     }
     b {
       color:white;
@@ -65,7 +74,7 @@
       <!-- lockscreen credentials (contains the form) -->
       <form class="lockscreen-credentials" action="checklog.php" method="post">
         <div class="input-group">
-          <input type="hidden" name="username" value="<?=$username?>">
+          <input type="hidden" name="username" value="<?=$user?>">
           <input type="password" class="form-control" placeholder="password" name="password">
 
           <div class="input-group-append">

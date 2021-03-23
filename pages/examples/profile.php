@@ -1,9 +1,41 @@
+<?php
+  session_start();
+
+  // se establece la conexion
+  include '../../login/data/config.php';
+  $conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
+  
+  if (isset($_SESSION['manager'])) {
+    $username = $_SESSION['manager'] .' ' . $_SESSION['surnames'];
+    $user = $_SESSION['manager'];
+    // se prepara consulta de usuario
+    $sql = "SELECT * FROM managers WHERE username = '$user'";
+    $role = 'gerente';
+
+  } else if (isset($_SESSION['employee'])) {
+    $username = $_SESSION['employee'] .' ' . $_SESSION['surnames'];
+    // se prepara consulta de usuario
+    $user = $_SESSION['employee'];
+    $sql = "SELECT * FROM employees WHERE username = '$user'";
+    $role = 'empleado';
+  }
+
+  $query = $conection -> query($sql);
+  $row = $query -> fetch_array(MYSQLI_ASSOC);
+
+  if ($conection -> connect_error) {
+      // die("La conexion fallo: " . $conexion -> connect_error);
+  }
+
+?>
+
+<!-- comienzo de html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | User Profile</title>
+  <title>perfil</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -12,7 +44,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -22,10 +54,10 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="../../index3.html" class="nav-link">Home</a>
+        <a href="../../index1.php" class="nav-link">Inicio</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="#" class="nav-link">Contacto</a>
       </li>
     </ul>
 
@@ -33,9 +65,6 @@
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
       <li class="nav-item">
-        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-          <i class="fas fa-search"></i>
-        </a>
         <div class="navbar-search-block">
           <form class="form-inline">
             <div class="input-group input-group-sm">
@@ -168,7 +197,7 @@
           <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="profile.php" class="d-block" style="text-transform:capitalize"><?=$username?></a>
         </div>
       </div>
 
@@ -518,7 +547,7 @@
               <li class="nav-item">
                 <a href="../examples/profile.html" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Profile</p>
+                  <p>Perfil</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -834,12 +863,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Profile</h1>
+            <h1 style="text-transform:capitalize">perfil</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">User Profile</li>
+              <li class="breadcrumb-item"><a href="../../index1.php"></a>Inicio</a></li>
+              <li class="breadcrumb-item active">Perfil de usuario</li>
             </ol>
           </div>
         </div>
@@ -861,19 +890,19 @@
                        alt="User profile picture">
                 </div>
 
-                <h3 class="profile-username text-center">Nina Mcintire</h3>
+                <h3 class="profile-username text-center" style="text-transform:capitalize"><?=$username?></h3>
 
-                <p class="text-muted text-center">Software Engineer</p>
+                <p class="text-muted text-center" style="text-transform:capitalize"><?=$role?></p>
 
                 <ul class="list-group list-group-unbordered mb-3">
                   <li class="list-group-item">
-                    <b>Followers</b> <a class="float-right">1,322</a>
+                    <b>Tareas realizadas</b> <a class="float-right">1,322</a>
                   </li>
                   <li class="list-group-item">
-                    <b>Following</b> <a class="float-right">543</a>
+                    <b>Tareas Actuales</b> <a class="float-right">543</a>
                   </li>
                   <li class="list-group-item">
-                    <b>Friends</b> <a class="float-right">13,287</a>
+                    <b>Ultima conexion</b> <a class="float-right">13,287</a>
                   </li>
                 </ul>
 
@@ -929,9 +958,9 @@
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Social</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Actividad</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Editar Perfil</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
@@ -1146,55 +1175,109 @@
                   </div>
                   <!-- /.tab-pane -->
 
-                  <div class="tab-pane" id="settings">
-                    <form class="form-horizontal">
-                      <div class="form-group row">
-                        <label for="inputName" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                          <input type="email" class="form-control" id="inputName" placeholder="Name">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                        <div class="col-sm-10">
-                          <input type="email" class="form-control" id="inputEmail" placeholder="Email">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputName2" placeholder="Name">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
-                        <div class="col-sm-10">
-                          <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <div class="offset-sm-2 col-sm-10">
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                            </label>
+                  <?php
+                  // si es un manager
+                  if (isset($_SESSION['manager'])){
+                  ?>
+                    <div class="tab-pane" id="settings">
+                      <form class="form-horizontal">
+                        <div class="form-group row">
+                          <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                          <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputName" placeholder="Name">
                           </div>
                         </div>
-                      </div>
-                      <div class="form-group row">
-                        <div class="offset-sm-2 col-sm-10">
-                          <button type="submit" class="btn btn-danger">Submit</button>
+                        <div class="form-group row">
+                          <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                          <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                          </div>
                         </div>
-                      </div>
-                    </form>
-                  </div>
-                  <!-- /.tab-pane -->
+                        <div class="form-group row">
+                          <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputName2" placeholder="Name">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
+                          <div class="col-sm-10">
+                            <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="offset-sm-2 col-sm-10">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="offset-sm-2 col-sm-10">
+                            <button type="submit" class="btn btn-danger">Submit</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <!-- /.tab-pane -->
+
+                  <?php
+                  // si es un empleado
+                  } else if (isset($_SESSION['employee'])){
+                  ?>
+                    <div class="tab-pane" id="settings">
+                      <form class="form-horizontal" action="upload.php" method="post">
+                        <div class="form-group row">
+                          <label for="inputEmail" class="col-sm-2 col-form-label">Correo</label>
+                          <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail" placeholder="email" name="email" value="<?=$row['email']?>">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="inputName2" class="col-sm-2 col-form-label">Telefono</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputName2" placeholder="phone" name="phone" value="<?=$row['phone']?>">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="inputName" class="col-sm-2 col-form-label">Contraseña</label>
+                          <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputName" placeholder="Actual (obligatoria)" name="current_pass">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="inputName" class="col-sm-2 col-form-label">Contraseña</label>
+                          <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputName" placeholder="Nueva (opcional)" name="new_pass">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Imagen</label>
+                          <div class="col-sm-10">
+                            <input type="file" class="form-control" placeholder=" de perfil" name="picture">
+                            <input type="hidden" name="user" value="<?=$user?>">
+                            <input type="hidden" name="session" value="employees">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="offset-sm-2 col-sm-10">
+                            <button type="submit" class="btn btn-danger">Actualizar</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <!-- /.tab-pane -->
+                  <?php
+                  }
+                  ?>
                 </div>
                 <!-- /.tab-content -->
               </div><!-- /.card-body -->
