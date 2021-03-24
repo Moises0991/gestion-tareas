@@ -1,5 +1,15 @@
 <?php
   session_start();
+  $now = time();
+
+  // evaluacion de tiempo en sesion
+  if($now > $_SESSION['expire']) {
+    header('Location: lockscreen.php');
+    exit;
+  } else {
+    $_SESSION['start'] = time();
+    $_SESSION['expire'] = $_SESSION['start'] + (5*60);
+  }
 
   // se establece la conexion
   include '../../login/data/config.php';
@@ -194,7 +204,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="view.php?username='<?=$user?>'" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="profile.php" class="d-block" style="text-transform:capitalize"><?=$username?></a>
@@ -886,7 +896,7 @@
               <div class="card-body box-profile">
                 <div class="text-center">
                   <img class="profile-user-img img-fluid img-circle"
-                       src="../../dist/img/user4-128x128.jpg"
+                       src="view.php?username='<?=$user?>'"
                        alt="User profile picture">
                 </div>
 
@@ -1180,61 +1190,25 @@
                   if (isset($_SESSION['manager'])){
                   ?>
                     <div class="tab-pane" id="settings">
-                      <form class="form-horizontal">
+                      <form class="form-horizontal" enctype="multipart/form-data" action="update.php" method="post">
                         <div class="form-group row">
-                          <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                          <label for="username" class="col-sm-2 col-form-label">Nombre</label>
                           <div class="col-sm-10">
-                            <input type="email" class="form-control" id="inputName" placeholder="Name">
+                            <input type="text" class="form-control" id="username" placeholder="Nombre" name="username" value="<?=$row['username']?>">
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                          <label for="surnames" class="col-sm-2 col-form-label">Apellidos</label>
                           <div class="col-sm-10">
-                            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                            <input type="text" class="form-control" id="surnames" placeholder="Apellidos" name="surnames" value="<?=$row['surnames']?>">
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
+                          <label for="age" class="col-sm-2 col-form-label">Edad</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="inputName2" placeholder="Name">
+                            <input type="text" class="form-control" id="age" placeholder="Edad" name="age" value="<?=$row['user_age']?>">
                           </div>
                         </div>
-                        <div class="form-group row">
-                          <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
-                          <div class="col-sm-10">
-                            <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <div class="offset-sm-2 col-sm-10">
-                            <div class="checkbox">
-                              <label>
-                                <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <div class="offset-sm-2 col-sm-10">
-                            <button type="submit" class="btn btn-danger">Submit</button>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                    <!-- /.tab-pane -->
-
-                  <?php
-                  // si es un empleado
-                  } else if (isset($_SESSION['employee'])){
-                  ?>
-                    <div class="tab-pane" id="settings">
-                      <form class="form-horizontal" action="upload.php" method="post">
                         <div class="form-group row">
                           <label for="inputEmail" class="col-sm-2 col-form-label">Correo</label>
                           <div class="col-sm-10">
@@ -1244,32 +1218,78 @@
                         <div class="form-group row">
                           <label for="inputName2" class="col-sm-2 col-form-label">Telefono</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="inputName2" placeholder="phone" name="phone" value="<?=$row['phone']?>">
+                            <input type="text" class="form-control" id="inputName" placeholder="phone" name="phone" value="<?=$row['phone']?>">
                           </div>
                         </div>
                         <div class="form-group row">
                           <label for="inputName" class="col-sm-2 col-form-label">Contraseña</label>
                           <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputName" placeholder="Actual (obligatoria)" name="current_pass">
+                            <input type="password" class="form-control" id="inputName2" placeholder="Actual (obligatoria)" name="current_pass">
                           </div>
                         </div>
                         <div class="form-group row">
                           <label for="inputName" class="col-sm-2 col-form-label">Contraseña</label>
                           <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputName" placeholder="Nueva (opcional)" name="new_pass">
+                            <input type="password" class="form-control" placeholder="Nueva (opcional)" name="new_pass">
                           </div>
                         </div>
                         <div class="form-group row">
                           <label class="col-sm-2 col-form-label">Imagen</label>
                           <div class="col-sm-10">
-                            <input type="file" class="form-control" placeholder=" de perfil" name="picture">
+                            <input type="file" class="form-control" id="picture" name="picture" accept="image/png, image/jpeg">
+                            <input type="hidden" name="user" value="<?=$user?>">
+                            <input type="hidden" name="session" value="managers">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="offset-sm-2 col-sm-10">
+                            <button type="submit" class="btn btn-danger" name="submit">Actualizar</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                      <!-- /.tab-pane -->
+                  <?php
+                  // si es un empleado
+                  } else if (isset($_SESSION['employee'])){
+                  ?>
+                    <div class="tab-pane" id="settings">
+                      <form class="form-horizontal" enctype="multipart/form-data" action="update.php" method="post">
+                        <div class="form-group row">
+                          <label for="inputEmail" class="col-sm-2 col-form-label">Correo</label>
+                          <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail" placeholder="email" name="email" value="<?=$row['email']?>">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="inputName2" class="col-sm-2 col-form-label">Telefono</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputName" placeholder="phone" name="phone" value="<?=$row['phone']?>">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="inputName" class="col-sm-2 col-form-label">Contraseña</label>
+                          <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputName2" placeholder="Actual (obligatoria)" name="current_pass">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="inputName" class="col-sm-2 col-form-label">Contraseña</label>
+                          <div class="col-sm-10">
+                            <input type="password" class="form-control" placeholder="Nueva (opcional)" name="new_pass">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Imagen</label>
+                          <div class="col-sm-10">
+                            <input type="file" class="form-control" id="picture" name="picture" accept="image/png, image/jpeg">
                             <input type="hidden" name="user" value="<?=$user?>">
                             <input type="hidden" name="session" value="employees">
                           </div>
                         </div>
                         <div class="form-group row">
                           <div class="offset-sm-2 col-sm-10">
-                            <button type="submit" class="btn btn-danger">Actualizar</button>
+                            <button type="submit" class="btn btn-danger" name="submit">Actualizar</button>
                           </div>
                         </div>
                       </form>

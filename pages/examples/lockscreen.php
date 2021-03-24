@@ -67,7 +67,7 @@
     <div class="lockscreen-item">
       <!-- lockscreen image -->
       <div class="lockscreen-image">
-        <img src="../../dist/img/user1-128x128.jpg" alt="User Image">
+        <img src="view.php?username='<?=$user?>'" alt="User Image">
       </div>
       <!-- /.lockscreen-image -->
 
