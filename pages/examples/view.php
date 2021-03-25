@@ -10,8 +10,8 @@
     }
     
     // queries para determina tipo de usuario
-    $sql_managers = "SELECT * FROM managers WHERE username = {$_GET['username']}";
-    $sql_employees = "SELECT * FROM employees WHERE username = {$_GET['username']}";
+    $sql_managers = "SELECT * FROM managers WHERE nickname = {$_GET['nickname']}";
+    $sql_employees = "SELECT * FROM employees WHERE nickname = {$_GET['nickname']}";
 
     // se ejecutan quieries
     $managers_query = $conection -> query($sql_managers);
@@ -25,7 +25,7 @@
     } 
 
     // se ejecuta consulta final independientemente de la tabla origen
-    $sql = "SELECT picture FROM $table WHERE username = {$_GET['username']}";
+    $sql = "SELECT picture FROM $table WHERE nickname = {$_GET['nickname']}";
     $sentence = $conection -> query($sql);
 
 

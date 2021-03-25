@@ -1,6 +1,6 @@
 <?php
     //Recibimos las dos variables
-    $user=$_POST["username"];
+    $nickname=$_POST["nickname"];
     $password=$_POST["password"];
 
     try {
@@ -10,8 +10,8 @@
         $conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
 
         // se preparan consultas de usuario
-        $sql_managers = "SELECT * FROM managers WHERE username = '$user'";
-        $sql_employees = "SELECT * FROM employees WHERE username = '$user'";
+        $sql_managers = "SELECT * FROM managers WHERE nickname = '$nickname'";
+        $sql_employees = "SELECT * FROM employees WHERE nickname = '$nickname'";
 
         // se ejecutan quieries
         $managers_query = $conection -> query($sql_managers);
@@ -36,8 +36,8 @@
         
         if ($password == $row['pass_user']) {
             session_start();
-            $_SESSION["manager"] = $user;
-            $_SESSION["surnames"] = $row['surnames'];
+            $_SESSION["username"] = $row['username'];
+            $_SESSION["manager"] = $nickname;
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();
             $_SESSION['expire'] = $_SESSION['start'] + (5*60);
@@ -46,11 +46,11 @@
 
             include ('../../chat/Chat.php');
             $chat = new Chat();
-            $user = $chat->loginUsers($_POST['username'], $_POST['password']);	
+            $user = $chat->loginUsers($_POST['nickname'], $_POST['password']);	
 
             // asegura que no devuelva vacio la creacion de usuario y crea sesion
             if(!empty($user)) {
-                $_SESSION['username'] = $user[0]['username'];
+                $_SESSION['nickname'] = $user[0]['nickname'];
                 $_SESSION['userid'] = $user[0]['userid'];
 
                 // se actualizar el chat de acuerdo al usuario "userid"
@@ -73,8 +73,8 @@
         if ($password == $row['pass_user']) {
             session_start();
             $_SESSION['id_employee'] = $row['id'];
-            $_SESSION["employee"]=$user;
-            $_SESSION["surnames"] = $row['surnames'];
+            $_SESSION["employee"]=$nickname;
+            $_SESSION["username"] = $row['username'];
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();
             $_SESSION['expire'] = $_SESSION['start'] + (5*60);

@@ -6,8 +6,8 @@ CREATE TABLE managers (
   -- UNSIGNED sirve para permitir solo valores positivos (sin signo)
   -- userid int(11) NOT NULL,
   userid INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-  username VARCHAR(30) NOT NULL,
-  surnames VARCHAR(40) NOT NULL,
+  nickname VARCHAR(30) NOT NULL,
+  username VARCHAR(40) NOT NULL,
   pass_user VARCHAR(50) NOT NULL,
   user_age INT(2) UNSIGNED NOT NULL, 
   email VARCHAR(30) NOT NULL,
@@ -22,15 +22,15 @@ CREATE TABLE managers (
   update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
-INSERT INTO managers (username, surnames, pass_user, user_age, email, phone, avatar, picture, current_session, online) values ('moises', 'soler zetina', 'soler', '21', 'moises0991@gmail.com', '9981584073','user1.jpg', '', 2,1);
-INSERT INTO managers (username, surnames, pass_user, user_age, email, phone, avatar, picture, current_session, online) values ('manolo', 'garcia peralta', 'manolo', '23', 'manolo@gmail.com', '9988391319','user2.jpg', '', 1,1);
+INSERT INTO managers (nickname, username, pass_user, user_age, email, phone, avatar, picture, current_session, online) values ('moises0991', 'moises soler zetina', 'soler', '21', 'moises0991@gmail.com', '9981584073','user1.jpg', '', 2,1);
+INSERT INTO managers (nickname, username, pass_user, user_age, email, phone, avatar, picture, current_session, online) values ('jeff0991', 'jeff malone peralta', 'manolo', '23', 'malone@gmail.com', '9988391319','user2.jpg', '', 1,1);
 
 
 CREATE TABLE employees (
     -- UNSIGNED sirve para permitir solo valores positivos (sin signo)
     id INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-    username VARCHAR(30) NOT NULL,
-    surnames VARCHAR(40) NOT NULL,
+    nickname VARCHAR(30) NOT NULL,
+    username VARCHAR(40) NOT NULL,
     pass_user VARCHAR(50) NOT NULL,
     user_age INT(2) UNSIGNED NOT NULL, 
     email VARCHAR(30) NOT NULL,
@@ -42,8 +42,8 @@ CREATE TABLE employees (
     create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 );
-INSERT INTO employees (username, surnames, pass_user, user_age, email, phone, avatar, picture) values ('ramona', 'salazar mendiola', 'soler', '21', 'ramona@gmail.com', '9988674739','user1.jpg','');
-INSERT INTO employees (username, surnames, pass_user, user_age, email, phone, avatar, picture) values ('raul', 'cordoba medina', 'raul', '22', 'raul@gmail.com', '9981497748','user1.jpg','');
+INSERT INTO employees (nickname, username, pass_user, user_age, email, phone, avatar, picture) values ('ramona0991', 'ramona salazar mendiola', 'soler', '21', 'ramona@gmail.com', '9988674739','user1.jpg','');
+INSERT INTO employees (nickname, username, pass_user, user_age, email, phone, avatar, picture) values ('raul0991', 'raul cordoba medina', 'raul', '22', 'raul@gmail.com', '9981497748','user1.jpg','');
 
 
 -- creacion de tablas para chat
@@ -96,7 +96,6 @@ ALTER TABLE `chat_login_details`
 COMMIT;
 
 
-
 CREATE TABLE tareas_asignadas (
   -- UNSIGNED sirve para permitir solo valores positivos (sin signo)
   id INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
@@ -104,14 +103,18 @@ CREATE TABLE tareas_asignadas (
   id_usuario INT(12) NOT NULL,
   descripcion_tarea VARCHAR(50) NOT NULL,
   importancia_tarea VARCHAR(20)  NOT NULL, 
+  estado_tarea varchar(20) NOT NULL,
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   fecha_expira VARCHAR(10) NOT NULL,
+  hora_expira time,
 
   update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   constraint fk_id_usuario foreign KEY (id_usuario)
     REFERENCES employees(id)
 );
+
+
 
 INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea, fecha_expira) VALUES ('test_tarea1',1,'test para asignarle una tarea al usuario 1 test','importante','2021-10-2');
 INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea, fecha_expira) VALUES ('test_tarea2',1,'test para asignarle una tarea al usuario 1 test','urgente','2021-01-2');

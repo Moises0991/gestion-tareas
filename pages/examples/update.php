@@ -2,7 +2,7 @@
 <?php
     session_start();
     // datos obtenidos
-    $user=$_POST["user"];
+    $nickname=$_POST["nickname"];
     $table=$_POST["session"];
     $password=$_POST["current_pass"];
     $email = $_POST['email'];
@@ -20,7 +20,7 @@
     $conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
 
     // se consulta inf completa de user
-    $sql = "SELECT * FROM $table WHERE username = '$user'";
+    $sql = "SELECT * FROM $table WHERE nickname = '$nickname'";
     $query = $conection -> query($sql);
 
     } catch (PDOException $pe) {
@@ -34,8 +34,9 @@
     // $password = md5($password);
     if ($table == 'managers') {
 
-        $username = $_POST['username'];
+        $user = $_POST['username'];
         $surnames = $_POST['surnames'];
+        $username = $user . ' ' . $surnames;
         $age = $_POST['age'];
 
         $row = $query -> fetch_array(MYSQLI_ASSOC);
@@ -50,8 +51,7 @@
                     $image = $_FILES['picture']['tmp_name'];
                     $imgContenido = addslashes(file_get_contents($image));
 
-
-                    $sql_update = "UPDATE $table SET username = '$username', surnames = '$surnames', user_age = '$age', email = '$email', phone = '$phone', pass_user = '$new_pass', picture = '$imgContenido', update_at = now() WHERE username='$user'";
+                    $sql_update = "UPDATE $table SET username = '$username', user_age = '$age', email = '$email', phone = '$phone', pass_user = '$new_pass', picture = '$imgContenido', update_at = now() WHERE nickname='$nickname'";
                     $sentence = $conection -> prepare($sql_update);
                     $sentence -> execute();
                     // COndicional para verificar la subida del fichero
@@ -60,9 +60,9 @@
                     }else{
                         echo "Ha fallado la subida, reintente nuevamente.";
                     } 
-                    // Sie el usuario no selecciona ninguna imagen
+                    // Si el usuario no selecciona ninguna imagen
                 }else{
-                    $sql_update = "UPDATE $table SET username = '$username', surnames = '$surnames', user_age = '$age', email = '$email', phone = '$phone', pass_user = '$new_pass', update_at = now() WHERE username='$user'";
+                    $sql_update = "UPDATE $table SET username = '$username', user_age = '$age', email = '$email', phone = '$phone', pass_user = '$new_pass', update_at = now() WHERE nickname='$nickname'";
                     $sentence = $conection -> prepare($sql_update);
                     $sentence -> execute();
                 }
@@ -89,12 +89,13 @@
 
                     $image = $_FILES['picture']['tmp_name'];
                     $imgContenido = addslashes(file_get_contents($image));
+                    echo '$imgContenido';
                     
                     if (empty($imgContenido)){
                         $imgContenido = $row['picture'];
                     }
 
-                    $sql_update = "UPDATE $table SET email='$email', phone = '$phone', pass_user = '$new_pass', picture = '$imgContenido', update_at = now() WHERE username='$user'";
+                    $sql_update = "UPDATE $table SET email='$email', phone = '$phone', pass_user = '$new_pass', picture = '$imgContenido', update_at = now() WHERE nickname='$nickname'";
                     $sentence = $conection -> prepare($sql_update);
                     $sentence -> execute();
 
@@ -106,7 +107,7 @@
                     } 
                     // Sie el usuario no selecciona ninguna imagen
                 }else{
-                    $sql_update = "UPDATE $table SET email='$email', phone = '$phone', pass_user = '$new_pass', update_at = now() WHERE username='$user'";
+                    $sql_update = "UPDATE $table SET email='$email', phone = '$phone', pass_user = '$new_pass', update_at = now() WHERE nickname='$nickname'";
                     $sentence = $conection -> prepare($sql_update);
                     $sentence -> execute();
                 }

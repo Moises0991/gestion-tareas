@@ -26,7 +26,7 @@
         <form  action="login/sessions/checklogin.php" method="POST" class="login">
             <p class="title">Iniciar sesión</p>
             <!-- creacion del input Usuario -->
-            <input type="text" placeholder="Usuario" autofocus autocomplete="on" name="username" id="username" required>
+            <input type="text" placeholder="Usuario" autofocus autocomplete="on" name="nickname" id="nickname" required>
             <i class="fa fa-user"></i>
             <!-- creacion del input password -->
             <input type="password" placeholder="Contraseña" name="password" id="password" required>

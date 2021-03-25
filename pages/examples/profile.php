@@ -16,22 +16,23 @@
   $conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
   
   if (isset($_SESSION['manager'])) {
-    $username = $_SESSION['manager'] .' ' . $_SESSION['surnames'];
-    $user = $_SESSION['manager'];
+    $nickname = $_SESSION['manager'];
+    
     // se prepara consulta de usuario
-    $sql = "SELECT * FROM managers WHERE username = '$user'";
+    $sql = "SELECT * FROM managers WHERE nickname = '$nickname'";
     $role = 'gerente';
 
   } else if (isset($_SESSION['employee'])) {
-    $username = $_SESSION['employee'] .' ' . $_SESSION['surnames'];
+    $nickname = $_SESSION['employee'];
     // se prepara consulta de usuario
-    $user = $_SESSION['employee'];
-    $sql = "SELECT * FROM employees WHERE username = '$user'";
+    $sql = "SELECT * FROM employees WHERE nickname = '$nickname'";
     $role = 'empleado';
   }
 
   $query = $conection -> query($sql);
   $row = $query -> fetch_array(MYSQLI_ASSOC);
+
+  $username = $row['username'];
 
   if ($conection -> connect_error) {
       // die("La conexion fallo: " . $conexion -> connect_error);
@@ -194,9 +195,9 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../../index3.html" class="brand-link">
-      <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+    <a href="../../index1.php" class="brand-link">
+      <img src="../../img/logo.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8;">
+      <span class="brand-text font-weight-light">NiceCode Team</span>
     </a>
 
     <!-- Sidebar -->
@@ -204,7 +205,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="view.php?username='<?=$user?>'" class="img-circle elevation-2" alt="User Image">
+          <img src="view.php?nickname='<?=$nickname?>'" style="object-fit: cover; width:33px; height: 33px;" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="profile.php" class="d-block" style="text-transform:capitalize"><?=$username?></a>
@@ -896,7 +897,8 @@
               <div class="card-body box-profile">
                 <div class="text-center">
                   <img class="profile-user-img img-fluid img-circle"
-                       src="view.php?username='<?=$user?>'"
+                       src="view.php?nickname='<?=$nickname?>'"
+                       style="width:100px; height: 100px; object-fit:cover"
                        alt="User profile picture">
                 </div>
 
@@ -916,14 +918,14 @@
                   </li>
                 </ul>
 
-                <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                <a href="../../index.php" class="btn btn-danger btn-block"><b>Cerrar Sesión</b></a>
               </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
 
             <!-- About Me Box -->
-            <div class="card card-primary">
+            <div class="card card-primary" style="display:none">
               <div class="card-header">
                 <h3 class="card-title">About Me</h3>
               </div>
@@ -1040,7 +1042,7 @@
                     <!-- /.post -->
 
                     <!-- Post -->
-                    <div class="post">
+                    <div class="post" style="display:none">
                       <div class="user-block">
                         <img class="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg" alt="User Image">
                         <span class="username">
@@ -1189,18 +1191,23 @@
                   // si es un manager
                   if (isset($_SESSION['manager'])){
                   ?>
+                    <?php
+                      $username_array = explode (" ", $username);
+                      $name = $username_array[0];
+                      $surname = $username_array[1] . ' ' . $username_array[2];
+                    ?>
                     <div class="tab-pane" id="settings">
                       <form class="form-horizontal" enctype="multipart/form-data" action="update.php" method="post">
                         <div class="form-group row">
                           <label for="username" class="col-sm-2 col-form-label">Nombre</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="username" placeholder="Nombre" name="username" value="<?=$row['username']?>">
+                            <input type="text" class="form-control" id="username" placeholder="Nombre" name="username" value="<?=$name?>">
                           </div>
                         </div>
                         <div class="form-group row">
                           <label for="surnames" class="col-sm-2 col-form-label">Apellidos</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="surnames" placeholder="Apellidos" name="surnames" value="<?=$row['surnames']?>">
+                            <input type="text" class="form-control" id="surnames" placeholder="Apellidos" name="surnames" value="<?=$surname?>">
                           </div>
                         </div>
                         <div class="form-group row">
@@ -1237,13 +1244,13 @@
                           <label class="col-sm-2 col-form-label">Imagen</label>
                           <div class="col-sm-10">
                             <input type="file" class="form-control" id="picture" name="picture" accept="image/png, image/jpeg">
-                            <input type="hidden" name="user" value="<?=$user?>">
+                            <input type="hidden" name="nickname" value="<?=$nickname?>">
                             <input type="hidden" name="session" value="managers">
                           </div>
                         </div>
                         <div class="form-group row">
                           <div class="offset-sm-2 col-sm-10">
-                            <button type="submit" class="btn btn-danger" name="submit">Actualizar</button>
+                            <button type="submit" class="btn btn-outline-success" name="submit">Actualizar</button>
                           </div>
                         </div>
                       </form>
@@ -1283,13 +1290,13 @@
                           <label class="col-sm-2 col-form-label">Imagen</label>
                           <div class="col-sm-10">
                             <input type="file" class="form-control" id="picture" name="picture" accept="image/png, image/jpeg">
-                            <input type="hidden" name="user" value="<?=$user?>">
+                            <input type="hidden" name="nickname" value="<?=$nickname?>">
                             <input type="hidden" name="session" value="employees">
                           </div>
                         </div>
                         <div class="form-group row">
                           <div class="offset-sm-2 col-sm-10">
-                            <button type="submit" class="btn btn-danger" name="submit">Actualizar</button>
+                            <button type="submit" class="btn btn-outline-success" name="submit">Actualizar</button>
                           </div>
                         </div>
                       </form>
@@ -1316,7 +1323,8 @@
     <div class="float-right d-none d-sm-block">
       <b>Version</b> 3.1.0-rc
     </div>
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    <strong>Realizado por <a href="https://adminlte.io">NiceCode</a>&copy;.</strong>
+    All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->

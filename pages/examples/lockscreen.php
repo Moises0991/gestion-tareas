@@ -5,9 +5,9 @@
     $username = $_COOKIE['username']; 
   } 
 
-  if(isset($_COOKIE['user']))
+  if(isset($_COOKIE['nickname']))
   { 
-    $user = $_COOKIE['user']; 
+    $nickname = $_COOKIE['nickname']; 
   } 
 
 ?>
@@ -16,15 +16,15 @@
 <?php
   session_start();
   if (isset($_SESSION['manager'])){
-    $username = $_SESSION['manager'] . ' ' . $_SESSION['surnames'];
-    $user = $_SESSION['manager'];
+    $username = $_SESSION['username']; 
+    $nickname = $_SESSION['manager'];
     setcookie('username', $username); 
-    setcookie('user', $user); 
+    setcookie('nickname', $nickname); 
   } else if (isset($_SESSION['employee'])){
-    $username = $_SESSION['employee'] . ' ' . $_SESSION['surnames'];
-    $user = $_SESSION['employee'];
+    $username = $_SESSION['username'];
+    $nickname = $_SESSION['employee'];
     setcookie('username', $username); 
-    setcookie('user', $user); 
+    setcookie('nickname', $nickname); 
   }
   session_destroy();
 ?>
@@ -67,14 +67,14 @@
     <div class="lockscreen-item">
       <!-- lockscreen image -->
       <div class="lockscreen-image">
-        <img src="view.php?username='<?=$user?>'" alt="User Image">
+        <img src="view.php?nickname='<?=$nickname?>'" style="object-fit: cover;" alt="User Image">
       </div>
       <!-- /.lockscreen-image -->
 
       <!-- lockscreen credentials (contains the form) -->
       <form class="lockscreen-credentials" action="checklog.php" method="post">
         <div class="input-group">
-          <input type="hidden" name="username" value="<?=$user?>">
+          <input type="hidden" name="nickname" value="<?=$nickname?>">
           <input type="password" class="form-control" placeholder="password" name="password">
 
           <div class="input-group-append">

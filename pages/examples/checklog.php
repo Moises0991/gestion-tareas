@@ -1,6 +1,6 @@
 <!-- validacion de usuario -->
 <?php
-    $user=$_POST["username"];
+    $nickname=$_POST["nickname"];
     $password=$_POST["password"];
 
     try {
@@ -10,8 +10,8 @@
         $conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
 
         // se preparan consultas de usuario
-        $sql_managers = "SELECT * FROM managers WHERE username = '$user'";
-        $sql_employees = "SELECT * FROM employees WHERE username = '$user'";
+        $sql_managers = "SELECT * FROM managers WHERE nickname = '$nickname'";
+        $sql_employees = "SELECT * FROM employees WHERE nickname = '$nickname'";
 
         // se ejecutan quieries
         $managers_query = $conection -> query($sql_managers);
@@ -35,8 +35,8 @@
         
         if ($password == $row['pass_user']) {
             session_start();
-            $_SESSION["manager"] = $user;
-            $_SESSION["surnames"] = $row['surnames'];
+            $_SESSION["manager"] = $nickname;
+            $_SESSION["username"] = $row['username'];
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();
             $_SESSION['expire'] = $_SESSION['start'] + (5*60);
@@ -72,8 +72,8 @@
         if ($password == $row['pass_user']) {
             session_start();
             $_SESSION['id_employee'] = $row['id'];
-            $_SESSION["employee"]=$user;
-            $_SESSION["surnames"] = $row['surnames'];
+            $_SESSION["employee"]=$nickname;
+            $_SESSION["username"] = $row['username'];
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();
             $_SESSION['expire'] = $_SESSION['start'] + (5*60);

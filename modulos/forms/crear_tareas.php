@@ -28,7 +28,7 @@
             'mensaje' => 'La tarea ' . escapar($_POST['nombre']) . ' ha sido creada con éxito'
          ];
             $nombre_tarea= $_POST['nombre'];
-            $nombre_usuario= $_POST['usuarios'];
+            $nombre_usuario = $_POST['usuarios'];
             $descripcion_tarea =$_POST['descripcion'];
             $importancia_tarea =$_POST['importancia'];
             $fecha_termina=$_POST['fecha_expira'];
@@ -116,7 +116,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="POST" enctype="multipart/form-data">
+              <form method="POST" id="CreateForm" enctype="multipart/form-data">
                 <div class="card-body">
                 
                   <div class="form-group">
@@ -131,7 +131,7 @@
                             if ($empleados && $sentencia -> rowCount()>0) {
                                 foreach ($empleados as $fila) {
                                     ?>
-                                     <option value="<?php echo escapar($fila["id"])?>"><?php echo escapar($fila["username"])." ". escapar($fila["surnames"]);?></option>
+                                     <option value="<?php echo escapar($fila["id"])?>"><?php echo escapar($fila["username"]);?></option>
                     <?php
                                 }
                             }
@@ -175,25 +175,22 @@
                          
                  </div>
                          
-                  
+                                  <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
+
 
               
               
                 </div>
                 
                 <!-- /.card-body -->
-
-                <div class="card-footer">
-                <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
-                  <button type="submit" name="submit" class="btn btn-primary">Crear tarea</button>
-                </div>
-                
+               
               </form>
+               
               <div class="row">
           <div class="col-md-12">
             <div class="card card-default">
               <div class="card-header">
-                <h3 class="card-title">Dropzone.js <small><em>jQuery File Upload</em> like look</small></h3>
+                <h3 class="card-title">Subir contenido extra <small><em>(Cualquier tipo de archivo)</em> </small></h3>
               </div>
               <div class="card-body">
                 <div id="actions" class="row">
@@ -203,7 +200,7 @@
                         <i class="fas fa-plus"></i>
                         <span>Add files</span>
                       </span>
-                      <button type="submit" class="btn btn-primary col start">
+                      <button type="" class="btn btn-primary col start">
                         <i class="fas fa-upload"></i>
                         <span>Start upload</span>
                       </button>
@@ -257,9 +254,15 @@
                   </div>
                 </div>
               </div>
+              </div>
+                <div class="card-footer">
+                  <button type="submit" name="submit" form="CreateForm" class="btn btn-primary">Crear tarea</button>
+                </div>
+                
+          <!--/.col (right) -->
+        </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                Visit <a href="https://www.dropzonejs.com">dropzone.js documentation</a> for more examples and information about the plugin.
               </div>
             </div>
             <!-- /.card -->
@@ -270,10 +273,7 @@
             
 
           
-          </div>
-          
-          <!--/.col (right) -->
-        </div>
+         
         <!-- /.row -->
         
       </div><!-- /.container-fluid -->
@@ -415,7 +415,7 @@
   previewNode.parentNode.removeChild(previewNode)
 
   var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-    url: "../tareas", // Set the url
+    url: "subir_archivo.php", // Set the url
     thumbnailWidth: 80,
     thumbnailHeight: 80,
     parallelUploads: 20,

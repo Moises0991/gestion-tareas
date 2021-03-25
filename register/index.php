@@ -20,33 +20,39 @@
 			$conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
 
             // $contraseña = md5($_POST['password']);
-			$username = $_POST['username'];
+			$user = $_POST['username'];
 			$surnames = $_POST['surnames'];
 			$pass_user = $_POST['password'];
 			$user_age = $_POST['age'];
 			$phone = $_POST['phone'];
 			$email = $_POST['email'];
+			$nickname = $_POST['nickname'];
+			$confirm_password = $_POST['confirm_password'];
 			$current_session = '1';
 			$online = '0';
+			$username = $user . ' ' . $surnames;
 
 			if ($_POST['gender']=='male') {
 				$avatar = 'user1.jpg';
+				$image = '../chat/userpics/user5.jpg';
+				$imgContenido = addslashes(file_get_contents($image));
 			} else {
 				$avatar = 'user2.jpg';
+				$image = '../chat/userpics/user4.jpg';
+				$imgContenido = addslashes(file_get_contents($image));
 			}
-
 
 			if(isset($_POST['job']) && $_POST['job']=='manager') {
 
-				$sql = "INSERT INTO `managers` (`username`, `surnames`, `pass_user`, `user_age`, `email`, `phone`, `avatar`, `current_session`, `online`) ";
-				$sql .= "VALUES ('$username', '$surnames', '$pass_user', '$user_age', '$email', '$phone', '$avatar', '$current_session', '$online')";
+				$sql = "INSERT INTO `managers` (`nickname`, `username`, `pass_user`, `user_age`, `email`, `phone`, `avatar`, `picture`, `current_session`, `online`) ";
+				$sql .= "VALUES ('$nickname', '$username', '$pass_user','$user_age', '$email', '$phone', '$avatar', '$imgContenido', '$current_session', '$online')";
 				$sentence = $conection->prepare($sql);
 				$sentence->execute();
 
 			} else {
 
-				$sql = "INSERT INTO `employees` (`username`, `surnames`, `pass_user`, `user_age`, `email`, `phone`, `avatar`) ";
-				$sql .= "VALUES ('$username', '$surnames', '$pass_user', '$user_age', '$email', '$phone','$avatar')";
+				$sql = "INSERT INTO `employees` (`nickname`, `username`, `pass_user`, `user_age`, `email`, `phone`, `avatar`, `picture`) ";
+				$sql .= "VALUES ('$nickname', '$username', '$pass_user', '$user_age', '$email', '$phone', '$avatar', '$imgContenido')";
 				$sentence = $conection->prepare($sql);
 				$sentence->execute();
 			}
@@ -79,7 +85,7 @@
                 <section>
                     <div class="inner">
 						<div class="image-holder">
-							<img src="images/form-wizard-1.jpg" alt="">
+							<img src="images/form-wizard-1.jpg" style="object-fit:cover; height: 521px;" alt="">
 						</div>
 						<div class="form-content" >
 							<div class="form-header">
@@ -133,7 +139,7 @@
                 <section>
                     <div class="inner">
 						<div class="image-holder">
-							<img src="images/form-wizard-2.jpg" alt="">
+							<img src="images/form-wizard-2.jpg" style="object-fit:cover; height: 521px;" alt="">
 						</div>
 						<div class="form-content">
 							<div class="form-header">
@@ -142,7 +148,7 @@
 							<p>Informacion adicional</p>
 							<div class="form-row">
 								<div class="form-holder w-100">
-									<input type="text" placeholder="Direccion" class="form-control" name="address">
+									<input type="text" placeholder="Nickname" class="form-control" name="nickname">
 								</div>
 							</div>
 							<div class="form-row">
@@ -150,7 +156,7 @@
 									<input type="password" placeholder="Contraseña" class="form-control" name="password">
 								</div>
 								<div class="form-holder">
-									<input type="password" placeholder="Confirmar Contraseña" class="form-control">
+									<input type="password" placeholder="Confirmar Contraseña" class="form-control" name="confirm_password">
 								</div>
 							</div>
 							<div class="form-row">
@@ -180,7 +186,7 @@
                 <section>
                     <div class="inner">
 						<div class="image-holder">
-							<img src="images/form-wizard-3.jpg" alt="">
+							<img src="images/form-wizard-3.jpg" style="object-fit:cover; height: 521px;" alt="">
 						</div>
 						<div class="form-content">
 							<div class="form-header">
