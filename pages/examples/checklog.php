@@ -40,16 +40,14 @@
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();
             $_SESSION['expire'] = $_SESSION['start'] + (5*60);
-            header("Location: ../../index1.php");
-            // exit();
 
             include ('../../chat/Chat.php');
             $chat = new Chat();
-            $user = $chat->loginUsers($_POST['username'], $_POST['password']);	
+            $user = $chat->loginUsers($_POST['nickname'], $_POST['password']);	
 
             // asegura que no devuelva vacio la creacion de usuario y crea sesion
             if(!empty($user)) {
-                $_SESSION['username'] = $user[0]['username'];
+                $_SESSION['nickname'] = $user[0]['nickname'];
                 $_SESSION['userid'] = $user[0]['userid'];
 
                 // se actualizar el chat de acuerdo al usuario "userid"
@@ -59,6 +57,10 @@
             } else {
                 $loginError = "Usuario y Contraseña invalida";
             };
+
+            header("Location: ../../index1.php");
+            // exit();
+
         } else {
             echo 'usuario y contraseña incorrectos';
             echo "<br><a href ='lockscreen.php'> Volver a intentarlo</a>";

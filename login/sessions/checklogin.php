@@ -40,9 +40,7 @@
             $_SESSION["manager"] = $nickname;
             $_SESSION['loggedin'] = true;
             $_SESSION['start'] = time();
-            $_SESSION['expire'] = $_SESSION['start'] + (5*60);
-            header("Location: ../../index1.php");
-            // exit();
+            $_SESSION['expire'] = $_SESSION['start'] + (50*600);
 
             include ('../../chat/Chat.php');
             $chat = new Chat();
@@ -60,6 +58,8 @@
             } else {
                 $loginError = "Usuario y Contraseña invalida";
             };
+            header("Location: ../../index1.php");
+            // exit();
         } else {
             echo 'usuario y contraseña incorrectos';
             echo "<br><a href ='../../index.php'> Volver a intentarlo</a>";
@@ -93,6 +93,6 @@
         exit();
     }
     //cierro conexion
-    mysqli_close($conexion); 
+    mysqli_close($conection); 
 
 ?>

@@ -33,26 +33,32 @@
 			$username = $user . ' ' . $surnames;
 
 			if ($_POST['gender']=='male') {
-				$avatar = 'user1.jpg';
-				$image = '../chat/userpics/user5.jpg';
-				$imgContenido = addslashes(file_get_contents($image));
+				$filename = $nickname . '.jpg';
+				$source = '../chat/userpics/user5.jpg';
+				$destination = '../img/avatars/'.$filename;
+				if (!copy($source, $destination)) {
+					echo "Error al copiar $source...\n";
+				}
 			} else {
-				$avatar = 'user2.jpg';
-				$image = '../chat/userpics/user4.jpg';
-				$imgContenido = addslashes(file_get_contents($image));
+				$filename = $nickname . '.jpg';
+				$source = '../chat/userpics/user4.jpg';
+				$destination = '../img/avatars/'.$filename;
+				if (!copy($source, $destination)) {
+					echo "Error al copiar $source...\n";
+				}
 			}
 
 			if(isset($_POST['job']) && $_POST['job']=='manager') {
 
-				$sql = "INSERT INTO `managers` (`nickname`, `username`, `pass_user`, `user_age`, `email`, `phone`, `avatar`, `picture`, `current_session`, `online`) ";
-				$sql .= "VALUES ('$nickname', '$username', '$pass_user','$user_age', '$email', '$phone', '$avatar', '$imgContenido', '$current_session', '$online')";
+				$sql = "INSERT INTO `managers` (`nickname`, `username`, `pass_user`, `user_age`, `email`, `phone`, `avatar`, `current_session`, `online`) ";
+				$sql .= "VALUES ('$nickname', '$username', '$pass_user','$user_age', '$email', '$phone', '$filename', '$current_session', '$online')";
 				$sentence = $conection->prepare($sql);
 				$sentence->execute();
 
 			} else {
 
-				$sql = "INSERT INTO `employees` (`nickname`, `username`, `pass_user`, `user_age`, `email`, `phone`, `avatar`, `picture`) ";
-				$sql .= "VALUES ('$nickname', '$username', '$pass_user', '$user_age', '$email', '$phone', '$avatar', '$imgContenido')";
+				$sql = "INSERT INTO `employees` (`nickname`, `username`, `pass_user`, `user_age`, `email`, `phone`, `avatar`) ";
+				$sql .= "VALUES ('$nickname', '$username', '$pass_user', '$user_age', '$email', '$phone', '$filename')";
 				$sentence = $conection->prepare($sql);
 				$sentence->execute();
 			}

@@ -13,7 +13,6 @@ CREATE TABLE managers (
   email VARCHAR(30) NOT NULL,
   phone BIGINT(55) UNSIGNED NOT NULL, 
   avatar varchar(255) NOT NULL,
-  picture longblob NOT NULL,
   current_session int(11) NOT NULL,
   online int(11) NOT NULL,
   -- TIMESTAMP es un tipo de dato que contiene fecha y hora
@@ -22,8 +21,8 @@ CREATE TABLE managers (
   update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
-INSERT INTO managers (nickname, username, pass_user, user_age, email, phone, avatar, picture, current_session, online) values ('moises0991', 'moises soler zetina', 'soler', '21', 'moises0991@gmail.com', '9981584073','user1.jpg', '', 2,1);
-INSERT INTO managers (nickname, username, pass_user, user_age, email, phone, avatar, picture, current_session, online) values ('jeff0991', 'jeff malone peralta', 'manolo', '23', 'malone@gmail.com', '9988391319','user2.jpg', '', 1,1);
+INSERT INTO managers (nickname, username, pass_user, user_age, email, phone, avatar, current_session, online) values ('moises0991', 'moises soler zetina', 'soler', '21', 'moises0991@gmail.com', '9981584073','moises0991.jpg', 2, 1);
+INSERT INTO managers (nickname, username, pass_user, user_age, email, phone, avatar, current_session, online) values ('jeff0991', 'jeff malone peralta', 'manolo', '23', 'malone@gmail.com', '9988391319','jeff0991.jpg', 1, 1);
 
 
 CREATE TABLE employees (
@@ -36,14 +35,13 @@ CREATE TABLE employees (
     email VARCHAR(30) NOT NULL,
     phone BIGINT(55) UNSIGNED NOT NULL, 
     avatar varchar(255) NOT NULL,
-    picture longblob NOT NULL,
     -- TIMESTAMP es un tipo de dato que contiene fecha y hora
     -- La función CURRENT_TIMESTAMP devuelve la fecha y la hora local actual 
     create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 );
-INSERT INTO employees (nickname, username, pass_user, user_age, email, phone, avatar, picture) values ('ramona0991', 'ramona salazar mendiola', 'soler', '21', 'ramona@gmail.com', '9988674739','user1.jpg','');
-INSERT INTO employees (nickname, username, pass_user, user_age, email, phone, avatar, picture) values ('raul0991', 'raul cordoba medina', 'raul', '22', 'raul@gmail.com', '9981497748','user1.jpg','');
+INSERT INTO employees (nickname, username, pass_user, user_age, email, phone, avatar) values ('ramona0991', 'ramona salazar mendiola', 'soler', '21', 'ramona@gmail.com', '9988674739','ramona0991.jpg');
+INSERT INTO employees (nickname, username, pass_user, user_age, email, phone, avatar) values ('raul0991', 'raul cordoba medina', 'raul', '22', 'raul@gmail.com', '9981497748','raul0991.jpg');
 
 
 -- creacion de tablas para chat
@@ -115,21 +113,10 @@ CREATE TABLE tareas_asignadas (
 );
 
 
-
-INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea, fecha_expira) VALUES ('test_tarea1',1,'test para asignarle una tarea al usuario 1 test','importante','2021-10-2');
-INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea, fecha_expira) VALUES ('test_tarea2',1,'test para asignarle una tarea al usuario 1 test','urgente','2021-01-2');
-INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea, fecha_expira) VALUES ('test_tarea3',2,'test para asignarle una tarea al usuario 2 moises','importante','2021-10-2');
-INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea, fecha_expira) VALUES ('test_tarea4',2,'test para asignarle una tarea al usuario 2 moises','normal','2021-11-2');
-
-
-
 CREATE TABLE archivos_tareas (
 id_archivo  INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 nombre_archivo varchar(100) not null,
-id_employees int(12) not null,
 id_tareas int(12) not null,
- constraint fk_id_usuario foreign KEY (id_employees)
-    REFERENCES employees(id),
      constraint fk_id_tares foreign KEY (id_tareas)
     REFERENCES tareas_asignadas(id)
 

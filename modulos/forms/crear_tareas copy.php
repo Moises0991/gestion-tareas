@@ -1,4 +1,3 @@
-
 <?php include 'header.php'?>
 
  <?php
@@ -21,6 +20,14 @@
   $sentencia = $conexion -> prepare($consultaSQL);
   $sentencia -> execute();
   $tareas = $sentencia -> fetch(PDO::FETCH_ASSOC);
+    
+  //modificacion para agragar descarga 25/03/21
+  $consulta_archivos= "SELECT  nombre_archivo FROM archivos_tareas where id_tareas=" . $id;
+  $sentencia1 = $conexion -> prepare($consulta_archivos);
+
+  $sentencia1 -> execute();
+  $archivos = $sentencia1 -> fetchAll();
+
 
  if (isset($_POST['submit'])) { //el isset es una funcion que determina si una variable esta definida o no en el php
          $resultado = [
@@ -169,15 +176,25 @@
                   
 
                   <div class="form-group">
-                    <label for="exampleInputFile">Adjuntar archivo</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile" name="file">
-                        <label class="custom-file-label" for="exampleInputFile">archivos</label>
-                      </div>
-                     
-                    </div>
-                  </div>
+                    <label for="exampleInputFile">Archivos Adjuntos</label>
+                     <?php
+                        if ($archivos && $sentencia1 -> rowCount()>0) {
+                            foreach ($archivos as $fila) {
+                              ?>
+                            
+                             <br> <a href="<?= '../tareas/' . escapar($fila["nombre_archivo"])?>"> <?php echo escapar($fila['nombre_archivo'])?></a>
+
+
+                        <?php
+                            }
+                          }else{
+
+                                echo "<br>no hay archivos adjuntos";
+
+                          }
+                        ?>
+
+                                      </div>
               
                 </div>
                 <!-- /.card-body -->

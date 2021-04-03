@@ -17,7 +17,6 @@
 
     // se establece la conexion
     include '../../login/data/config.php';
-    $conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
 
     // se consulta inf completa de user
     $sql = "SELECT * FROM $table WHERE nickname = '$nickname'";
@@ -42,34 +41,61 @@
         $row = $query -> fetch_array(MYSQLI_ASSOC);
         
         if ($password == $row['pass_user']) {
-            
+
             if(isset($_POST["submit"])){
 
-                $revisar = getimagesize($_FILES['picture']['tmp_name']);
-                if($revisar !== false){
+                $destinationFolder="../../img/avatars/";
+            
+                // si hay algun archivo que subir
+                if(isset($_FILES["avatar"]) && $_FILES["avatar"]["name"])
+                {
+                    // si es un formato de imagen
+                    if($_FILES["avatar"]["type"]=="image/jpeg" || $_FILES["avatar"]["type"]=="image/pjpeg" || $_FILES["avatar"]["type"]=="image/gif" || $_FILES["avatar"]["type"]=="image/png") {
+        
+                        // si exsite la carpeta o se ha creado
+                        if(file_exists($destinationFolder) || @mkdir($destinationFolder)) {
 
-                    $image = $_FILES['picture']['tmp_name'];
-                    $imgContenido = addslashes(file_get_contents($image));
+                            // validacion de tipo de formato
+                            $format = substr($_FILES["avatar"]["name"],-2);
+                            if ($format == "eg") {
+                                $format = ".jpeg";
+                            } else if ($format == "pg") {
+                                $format = ".jpg";
+                            } else if ($format == "ng") {
+                                $format = ".png";
+                            } else if ($format == "if") {
+                                $format = ".gif";
+                            }
+                            $filename = $nickname . $format;
 
-                    $sql_update = "UPDATE $table SET username = '$username', user_age = '$age', email = '$email', phone = '$phone', pass_user = '$new_pass', picture = '$imgContenido', update_at = now() WHERE nickname='$nickname'";
-                    $sentence = $conection -> prepare($sql_update);
-                    $sentence -> execute();
-                    // COndicional para verificar la subida del fichero
-                    if($sentence){
-                        echo "Archivo Subido Correctamente.";
+                            $source=$_FILES["avatar"]["tmp_name"];
+                            $destination=$destinationFolder.$filename;
+
+                            // movemos el archivo y se ejecuta la consulta de update
+                            if(@move_uploaded_file($source, $destination)) {
+                                $sql_update = "UPDATE $table SET username = '$username', user_age = '$age', email = '$email', phone = '$phone', pass_user = '$new_pass', avatar = '$filename', update_at = now() WHERE nickname='$nickname'";
+                                $sentence = $conection -> prepare($sql_update);
+                                $sentence -> execute();
+                                header("Location: profile.php");
+                                if($sentence){
+                                    echo "consulta guardada Correctamente.";
+                                }else{
+                                    echo "Ha fallado la subida, reintente nuevamente.";
+                                } 
+                            }else{
+                                echo "<br>No se ha podido mover el archivo: ".$filename;
+                            }
+                        }else{
+                            echo "<br>No se ha podido crear la carpeta: ".$destinationFolder;
+                        }
                     }else{
-                        echo "Ha fallado la subida, reintente nuevamente.";
-                    } 
-                    // Si el usuario no selecciona ninguna imagen
+                        echo "<br>".$filename." - NO es imagen jpg, png o gif";
+                    }
                 }else{
-                    $sql_update = "UPDATE $table SET username = '$username', user_age = '$age', email = '$email', phone = '$phone', pass_user = '$new_pass', update_at = now() WHERE nickname='$nickname'";
-                    $sentence = $conection -> prepare($sql_update);
-                    $sentence -> execute();
-                }
-
-                header("Location: profile.php");
-                exit();
+                    echo "<br>No se ha subido ninguna imagen";
+                }      
             }
+            exit();
         } else {
             echo 'Contraseña actual es erronea';
             echo "<br><a href ='profile.php'> Volver a intentarlo</a>";
@@ -84,35 +110,60 @@
             
             if(isset($_POST["submit"])){
 
-                $revisar = getimagesize($_FILES['picture']['tmp_name']);
-                if($revisar !== false){
 
-                    $image = $_FILES['picture']['tmp_name'];
-                    $imgContenido = addslashes(file_get_contents($image));
-                    echo '$imgContenido';
-                    
-                    if (empty($imgContenido)){
-                        $imgContenido = $row['picture'];
-                    }
+                $destinationFolder="../../img/avatars/";
+            
+                // si hay algun archivo que subir
+                if(isset($_FILES["avatar"]) && $_FILES["avatar"]["name"])
+                {
+                    // si es un formato de imagen
+                    if($_FILES["avatar"]["type"]=="image/jpeg" || $_FILES["avatar"]["type"]=="image/pjpeg" || $_FILES["avatar"]["type"]=="image/gif" || $_FILES["avatar"]["type"]=="image/png") {
+        
+                        // si exsite la carpeta o se ha creado
+                        if(file_exists($destinationFolder) || @mkdir($destinationFolder)) {
 
-                    $sql_update = "UPDATE $table SET email='$email', phone = '$phone', pass_user = '$new_pass', picture = '$imgContenido', update_at = now() WHERE nickname='$nickname'";
-                    $sentence = $conection -> prepare($sql_update);
-                    $sentence -> execute();
+                            // validacion de tipo de formato
+                            $format = substr($_FILES["avatar"]["name"],-2);
+                            if ($format == "eg") {
+                                $format = ".jpeg";
+                            } else if ($format == "pg") {
+                                $format = ".jpg";
+                            } else if ($format == "ng") {
+                                $format = ".png";
+                            } else if ($format == "if") {
+                                $format = ".gif";
+                            }
+                            $filename = $nickname . $format;
 
-                    // COndicional para verificar la subida del fichero
-                    if($sentence){
-                        echo "Archivo Subido Correctamente.";
+                            $source=$_FILES["avatar"]["tmp_name"];
+                            $destination=$destinationFolder.$filename;
+
+                            // movemos el archivo y se ejecuta la consulta de update
+                            if(@move_uploaded_file($source, $destination)) {
+
+                                $sql_update = "UPDATE $table SET email='$email', phone = '$phone', pass_user = '$new_pass', avatar = '$filename', update_at = now() WHERE nickname='$nickname'";
+                                $sentence = $conection -> prepare($sql_update);
+                                $sentence -> execute();
+
+                                header("Location: profile.php");
+                                if($sentence){
+                                    echo "consulta guardada Correctamente.";
+                                }else{
+                                    echo "Ha fallado la subida, reintente nuevamente.";
+                                } 
+                            }else{
+                                echo "<br>No se ha podido mover el archivo: ".$filename;
+                            }
+                        }else{
+                            echo "<br>No se ha podido crear la carpeta: ".$destinationFolder;
+                        }
                     }else{
-                        echo "Ha fallado la subida, reintente nuevamente.";
-                    } 
-                    // Sie el usuario no selecciona ninguna imagen
+                        echo "<br>".$filename." - NO es imagen jpg, png o gif";
+                    }
                 }else{
-                    $sql_update = "UPDATE $table SET email='$email', phone = '$phone', pass_user = '$new_pass', update_at = now() WHERE nickname='$nickname'";
-                    $sentence = $conection -> prepare($sql_update);
-                    $sentence -> execute();
-                }
-
-                header("Location: profile.php");
+                    echo "<br>No se ha subido ninguna imagen";
+                }      
+                
                 exit();
             }
         } else {

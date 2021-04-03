@@ -10,21 +10,37 @@
     $nickname = $_COOKIE['nickname']; 
   } 
 
+  if(isset($_COOKIE['avatar']))
+  { 
+    $avatar = $_COOKIE['avatar']; 
+  } 
+
 ?>
 
 <!-- se guarda el nombre del usuario -->
 <?php
   session_start();
+  include '../../login/data/config.php';
   if (isset($_SESSION['manager'])){
     $username = $_SESSION['username']; 
     $nickname = $_SESSION['manager'];
+    $sql = "SELECT * FROM managers WHERE nickname = '$nickname'";
+    $query = $conection -> query($sql);
+    $row = $query -> fetch_array(MYSQLI_ASSOC);
+    $avatar = $row['avatar'];
     setcookie('username', $username); 
     setcookie('nickname', $nickname); 
+    setcookie('avatar', $row['avatar']); 
   } else if (isset($_SESSION['employee'])){
     $username = $_SESSION['username'];
     $nickname = $_SESSION['employee'];
+    $sql = "SELECT * FROM employees WHERE nickname = '$nickname'";
+    $query = $conection -> query($sql);
+    $row = $query -> fetch_array(MYSQLI_ASSOC);
+    $avatar = $row['avatar'];
     setcookie('username', $username); 
     setcookie('nickname', $nickname); 
+    setcookie('avatar', $row['avatar']); 
   }
   session_destroy();
 ?>
@@ -67,7 +83,7 @@
     <div class="lockscreen-item">
       <!-- lockscreen image -->
       <div class="lockscreen-image">
-        <img src="view.php?nickname='<?=$nickname?>'" style="object-fit: cover;" alt="User Image">
+        <img src="../../img/avatars/<?=$avatar?>" style="object-fit: cover;" alt="User Image">
       </div>
       <!-- /.lockscreen-image -->
 

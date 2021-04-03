@@ -13,7 +13,6 @@
 
   // se establece la conexion
   include '../../login/data/config.php';
-  $conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
   
   if (isset($_SESSION['manager'])) {
     $nickname = $_SESSION['manager'];
@@ -205,7 +204,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="view.php?nickname='<?=$nickname?>'" style="object-fit: cover; width:33px; height: 33px;" class="img-circle elevation-2" alt="User Image">
+          <img src="../../img/avatars/<?=$row['avatar']?>" style="object-fit: cover; width:33px; height: 33px;" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="profile.php" class="d-block" style="text-transform:capitalize"><?=$username?></a>
@@ -897,7 +896,7 @@
               <div class="card-body box-profile">
                 <div class="text-center">
                   <img class="profile-user-img img-fluid img-circle"
-                       src="view.php?nickname='<?=$nickname?>'"
+                       src="../../img/avatars/<?=$row['avatar']?>"
                        style="width:100px; height: 100px; object-fit:cover"
                        alt="User profile picture">
                 </div>
@@ -918,6 +917,7 @@
                   </li>
                 </ul>
 
+                <a href="lockscreen.php" class="btn btn-secondary btn-block"><b>Suspender Sesión</b></a>
                 <a href="../../index.php" class="btn btn-danger btn-block"><b>Cerrar Sesión</b></a>
               </div>
               <!-- /.card-body -->
@@ -1197,7 +1197,7 @@
                       $surname = $username_array[1] . ' ' . $username_array[2];
                     ?>
                     <div class="tab-pane" id="settings">
-                      <form class="form-horizontal" enctype="multipart/form-data" action="update.php" method="post">
+                      <form class="form-horizontal" enctype="multipart/form-data" action="update.php" method="post" name="inscripcion">
                         <div class="form-group row">
                           <label for="username" class="col-sm-2 col-form-label">Nombre</label>
                           <div class="col-sm-10">
@@ -1243,7 +1243,7 @@
                         <div class="form-group row">
                           <label class="col-sm-2 col-form-label">Imagen</label>
                           <div class="col-sm-10">
-                            <input type="file" class="form-control" id="picture" name="picture" accept="image/png, image/jpeg">
+                            <input type="file" class="form-control" id="picture" name="avatar" accept="image/png, image/jpeg, image/gif">
                             <input type="hidden" name="nickname" value="<?=$nickname?>">
                             <input type="hidden" name="session" value="managers">
                           </div>
@@ -1289,7 +1289,7 @@
                         <div class="form-group row">
                           <label class="col-sm-2 col-form-label">Imagen</label>
                           <div class="col-sm-10">
-                            <input type="file" class="form-control" id="picture" name="picture" accept="image/png, image/jpeg">
+                            <input type="file" class="form-control" id="picture" name="avatar" accept="image/png, image/jpeg, image/gif">
                             <input type="hidden" name="nickname" value="<?=$nickname?>">
                             <input type="hidden" name="session" value="employees">
                           </div>

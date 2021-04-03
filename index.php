@@ -23,7 +23,7 @@
 <body>
     <div class="wrapper">
         <!-- creacion del formulario -->
-        <form  action="login/sessions/checklogin.php" method="POST" class="login">
+        <form  action="login/sessions/checklogin.php" method="POST" class="login" id="form">
             <p class="title">Iniciar sesión</p>
             <!-- creacion del input Usuario -->
             <input type="text" placeholder="Usuario" autofocus autocomplete="on" name="nickname" id="nickname" required>
@@ -41,6 +41,6 @@
         <footer><a target="blank" href="register">Registrarse</a></footer>
     </div>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-    <script  src="js/login.js"></script>
+    <!-- <script  src="login/js/login.js"></script> -->
 </body>
 </html>

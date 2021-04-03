@@ -18,7 +18,7 @@
             $sentencia -> execute();
             $id_ultima = $sentencia ->  fetch(PDO::FETCH_ASSOC);
             $id_tarea_actual = $id_ultima["id"]+1;
-            $consultaSQL = "INSERT INTO archivos_tareas (nombre_archivo, id_employees, id_tareas) VALUES ('$file_name','$id_usuarios_archivos',' $id_tarea_actual')";
+            $consultaSQL = "INSERT INTO archivos_tareas (nombre_archivo, id_tareas) VALUES ('$file_name',' $id_tarea_actual')";
             $conexion->query($consultaSQL);
 
 

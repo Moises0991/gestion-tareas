@@ -1,17 +1,30 @@
 <?php 
 session_start();
-include('header.php');
+// include('chat/header.php');
 ?>
-<title>Chat</title>
-<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
-<link href="css/style.css" rel="stylesheet" id="bootstrap-css">
-<script src="js/chat.js"></script>
-<style>
-.modal-dialog {
-    width: 400px;
-    margin: 30px auto;	
-}
-</style>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<!-- jQuery -->
+	<title>Chat</title>
+	<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+	<link href="chat/css/style.css" rel="stylesheet" id="bootstrap-css">
+	<script src="chat/js/chat.js"></script>
+
+	<style>
+	.modal-dialog {
+		width: 400px;
+		margin: 30px auto;	
+	}
+	</style>
+	
+</head>
 <div class="container">		
 	<!-- se evalua si ha una sesion iniciada -->
 	<?php if(isset($_SESSION['userid']) && $_SESSION['userid']) { ?> 	
@@ -24,14 +37,14 @@ include('header.php');
 					<!---------------------------------------- inicio div perfil ------------------------------------------>
 					<div id="profile">
 					<?php
-					include ('Chat.php');
+					include ('chat/Chat.php');
 					$chat = new Chat();
 					$loggedUser = $chat->getUserDetails($_SESSION['userid']);
 					echo '<div class="wrap">';
 					$currentSession = '';
 					foreach ($loggedUser as $user) {
 						$currentSession = $user['current_session'];
-						echo '<img id="profile-img" src="userpics/'.$user['avatar'].'" class="online" alt="" />';
+						echo '<img id="profile-img" src="chat/userpics/'.$user['avatar'].'" class="online" alt="" />';
 						echo  '<p>'.$user['nickname'].'</p>';
 							echo '<i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>';
 							echo '<div id="status-options">';
@@ -77,7 +90,7 @@ include('header.php');
 						echo '<li id="'.$user['userid'].'" class="contact '.$activeUser.'" data-touserid="'.$user['userid'].'" data-tousername="'.$user['nickname'].'">';
 						echo '<div class="wrap">';
 						echo '<span id="status_'.$user['userid'].'" class="contact-status '.$status.'"></span>';
-						echo '<img src="userpics/'.$user['avatar'].'" alt="" />';
+						echo '<img src="chat/userpics/'.$user['avatar'].'" alt="" />';
 						echo '<div class="meta">';
 						echo '<p class="name">'.$user['nickname'].'<span id="unread_'.$user['userid'].'" class="unread">'.$chat->getUnreadMessageCount($user['userid'], $_SESSION['userid']).'</span></p>';
 						echo '<p class="preview"><span id="isTyping_'.$user['userid'].'" class="isTyping"></span></p>';
@@ -114,7 +127,7 @@ include('header.php');
 					<?php
 					$userDetails = $chat->getUserDetails($currentSession);
 					foreach ($userDetails as $user) {										
-						echo '<img src="userpics/'.$user['avatar'].'" alt="" />';
+						echo '<img src="chat/userpics/'.$user['avatar'].'" alt="" />';
 							echo '<p>'.$user['nickname'].'</p>';
 							echo '<div class="social-media">';
 								echo '<i class="fa fa-facebook" aria-hidden="true"></i>';
@@ -153,7 +166,7 @@ include('header.php');
 				<!-------------------------------------------------------------------------------------------------------->
 			</div>
 		</div>
-	<?php } else { echo 'esta mamada no esta funcionando'; } ?>
+	<?php } else { echo 'esta roña no esta funcionando'; } ?>
 </div>	
 <!---------------------------------------- fin div container ------------------------------------------>
-<?php include('footer.php');?>
+<?php include('chat/footer.php');?>

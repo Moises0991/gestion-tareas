@@ -49,6 +49,7 @@ try {
 // agregar entre parentesis el apellido al titulo; sino lista de alumnos se queda igual
 // termina 
 
+
 ?>        
 <!-- logica conexiones -->
 
@@ -147,10 +148,14 @@ try {
                                     $i=$i+1;
                                     switch ($fila['importancia_tarea'])              
                                      {
-                                       case "Normal":
+                                      case "Baja":
+                                        $estilo="badge bg-warning";
+
+                                        break;
+                                        case "Normal":
                                          $estilo="badge bg-success";
                                          break;
-                                         case "Urgente":
+                                          case "Urgente":
                                           $estilo="badge bg-orange";
                                           break;
                                           case "Alta":
@@ -191,7 +196,8 @@ try {
                                               case "Expirada":
                                                 $estado="badge bg-danger";
 
-                                                break;
+                                              
+                                              
 
                                      }
 

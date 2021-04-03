@@ -1,6 +1,6 @@
 var working = false;
 $('#form').on('submit', function(e) {
-    e.preventDefault();
+    // e.preventDefault();
     if (working) return;
     working = true;
     var $this = $(this),

@@ -1,70 +1,39 @@
-<?php
-  session_start();
-  include 'funciones.php';
-
-  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-
-  } else {
-    echo "Esta pagina es solo para usuarios.<br>";
-    echo "<br><a href='../../index.php'>Login</a>";
-
-  exit;
-  }
-
-  $now = time();
-
-  if($now > $_SESSION['expire']) {
-    echo 'se termino la sesion';
-    header('Location: ../../pages/examples/lockscreen.php');
-    exit;
-  } else {
-    // se refresca la sesion
-    $_SESSION['start'] = time();
-    $_SESSION['expire'] = $_SESSION['start'] + (5*60);
-  }
-
-  if (isset($_SESSION['manager'])) {
-    $username = $_SESSION['username'];
-    $nickname = $_SESSION['manager'];
-
-  } else if (isset($_SESSION['employee'])) {
-    $username = $_SESSION['username'];
-    $nickname = $_SESSION['employee'];
-  }
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Inicio</title>
-
-  <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
-  <!-- daterange picker -->
-  <link rel="stylesheet" href="../../plugins/daterangepicker/daterangepicker.css">
-  <!-- iCheck for checkboxes and radio inputs -->
-  <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- Bootstrap Color Picker -->
-  <link rel="stylesheet" href="../../plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="../../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- Select2 -->
-  <link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
-  <link rel="stylesheet" href="../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-  <!-- Bootstrap4 Duallistbox -->
-  <link rel="stylesheet" href="../../plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
-  <!-- BS Stepper -->
-  <link rel="stylesheet" href="../../plugins/bs-stepper/css/bs-stepper.min.css">
-  <!-- dropzonejs -->
-  <link rel="stylesheet" href="../../plugins/dropzone/min/dropzone.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
-  <link rel="stylesheet" href="../../plugins/fullcalendar/main.css">
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+
+  <!-- chat -->
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+	<!-- jQuery -->
+	<title>Chat</title>
+	<!-- <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+	<link href="chat/css/style.css" rel="stylesheet" id="bootstrap-css"> -->
+	<script src="chat/js/chat.js"></script>
+
+	<style>
+	.modal-dialog {
+		width: 400px;
+		margin: 30px auto;	
+	}
+	</style>
+
+  <!-- <link rel="stylesheet" href="plugins/uplot/uPlot.min.css"> -->
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -206,8 +175,8 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../../index1.php" class="brand-link">
-      <img src="../../img/logo.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8;">
+    <a href="index1.php" class="brand-link">
+      <img src="img/logo.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8;">
       <span class="brand-text font-weight-light">NiceCode Team</span>
     </a>
     <!-- Sidebar -->
@@ -215,10 +184,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../../pages../examples/view.php?nickname='<?=$nickname?>'" style="object-fit: cover; width:33px; height: 33px;" class="img-circle elevation-2" alt="User Image">
+          <img src="img/avatars/<?=$row['avatar']?>" style="object-fit: cover; width:33px; height: 33px;" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="../../pages/examples/profile.php" class="d-block" style="text-transform: capitalize;"><?=$username?></a>
+          <a href="pages/examples/profile.php" class="d-block" style="text-transform: capitalize;"><?=$username?></a>
         </div>
       </div>
 
@@ -240,10 +209,8 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-header">Menu</li>
-          <!--  menu-open -->
-          <li class="nav-item">
-          <!-- active -->
-            <a href="#" class="nav-link ">
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Control
@@ -252,8 +219,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-              <!-- active -->
-                <a href="../../index1.php" class="nav-link ">
+                <a href="index1.php" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Panel</p>
                 </a>
@@ -291,7 +257,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="crear_tareas.php" class="nav-link">
+            <a href="modulos/forms/crear_tareas.php" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
               <p>
                 Crear tareas
@@ -310,7 +276,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="tareas.php" class="nav-link">
+                <a href="modulos/forms/tareas.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Tareas 
                   <span class="badge badge-info right">2</span>
@@ -318,7 +284,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="tareas_globales.php" class="nav-link">
+                <a href="modulos/forms/tareas_globales.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Tareas globales</p>
                 </a>
@@ -398,7 +364,7 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="calendar.php" class="nav-link">
+            <a href="modulos/forms/calendar.php" class="nav-link">
               <i class="nav-icon far fa-calendar-alt"></i>
               <p>
                 Calendario

@@ -148,6 +148,7 @@
                   <div class="form-group">
                     <label>importancia</label>
                     <select class="form-control" name="importancia">
+                    <option value="Baja">Baja</option>
                       <option value="Normal">Normal</option>
                       <option value="Alta">Alta</option>
                       <option value="Urgente">Urgente</option>
