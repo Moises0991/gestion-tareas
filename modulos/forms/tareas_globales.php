@@ -1,14 +1,15 @@
 <?php include 'header.php'?>
-
+<!-- aqui haremos modificaciones para que el manager funcione
+1- hay modificaciones en el header de la carpeta forms -->
 <?php
         // include 'funciones.php';
         csrf();
         if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
             die();
         }
+        
         $error = false;
         $config = include '../config.php';
-        $id=$_SESSION['id_employee'];
 // aqui inicia la consulta para ver las tareas
 
 try {
@@ -16,7 +17,8 @@ try {
   // el objetivo de las dos lineas siguientes es el de guardar los datos del dns y el pdo para establecer la proxima conexion a la bd
   $dns = 'mysql:host=' . $config['db']['host'] .';dbname=' . $config['db']['name'];
   $conexion = new PDO($dns, $config['db']['user'] ,$config['db']['pass'] ,$config['db']['options']);
- 
+ if (isset($_SESSION['id_employee'])){
+  $id=$_SESSION['id_employee'];
   // aqui comienza la consulta del apellido a la base de datos
   if (isset($_POST['buscar_tarea'])) {
       // El SQL Like se usa para poder determinar si una cadena de caracteres específica coincide con un patrón específico.
@@ -24,9 +26,19 @@ try {
       $consultaSQL = "SELECT * FROM tareas_asignadas WHERE  importancia_tarea LIKE '%" . $_POST['buscar_tarea'] . "%'";
   } else {
       // en la sig linea se guarda el query o consulta en la variable consultaSQL
-      $consultaSQL = "SELECT * FROM tareas_asignadas where id_usuario <> $id";
+      $consultaSQL = "SELECT tareas_asignadas.id as id_tareas ,tareas_asignadas.*, employees.*
+    FROM tareas_asignadas 
+     inner join employees on tareas_asignadas.id_usuario = employees.id  where id_usuario <> $id";
       // con lo anterior se pretende que consulta alumnos guarde todos los datos de la tabla alumnos
+  }}else
+  {
+    $consultaSQL = "SELECT tareas_asignadas.id as id_tareas ,tareas_asignadas.*, employees.*
+    FROM tareas_asignadas 
+     inner join employees on tareas_asignadas.id_usuario = employees.id";
+
+
   }
+
 
   // a continuacion se guarda en "sentencia" la preparacion del sql que creara la conexion con la base de datos
   $sentencia = $conexion -> prepare($consultaSQL);
@@ -96,9 +108,19 @@ try {
         <div class="card">
           
               <div class="card-header">
-                
+                <?php
+                  if(isset($_SESSION['id_employee'])){
+                ?>
                 <h3 class="card-title">Estas son las tareas de tus compañeros</h3>
+<?php
+}else
+{
+?>
+                <h3 class="card-title">Estas son las tareas de los empleados</h3>
 
+<?php
+}
+?>
                 <div class="card-tools">
                   <!-- <ul class="pagination pagination-sm float-right">
                     <li class="page-item"><a class="page-link" href="#">«</a></li>
@@ -126,8 +148,9 @@ try {
                 <table class="table">
                   <thead>
                     <tr>
-                      <th style="width: 10px">#</th>
-                      <th style="width: 300px">Nombre de Tarea</th>
+                      <th >#</th>
+                      <th>Nombre de Tarea</th>
+                      <th>Empleado</th>
                       <th>Importancia</th>
                       <th >Estatus de entrega</th>
                       <th>Acciones</th>
@@ -144,10 +167,14 @@ try {
                                     $i=$i+1;
                                     switch ($fila['importancia_tarea'])              
                                      {
-                                       case "Normal":
+                                      case "Baja":
+                                        $estilo="badge bg-warning";
+
+                                        break;
+                                        case "Normal":
                                          $estilo="badge bg-success";
                                          break;
-                                         case "Urgente":
+                                          case "Urgente":
                                           $estilo="badge bg-orange";
                                           break;
                                           case "Alta":
@@ -156,25 +183,45 @@ try {
                                             case "Inmediata":
                                             $estilo="badge bg-danger";
                                             break;
-
                                      }
+                                     $hoy = date("Y-m-d H:i:00",time());
+                                     
+                                     //  $fff = $hoy["year"]."-0".$hoy["mon"]."-"."0".$hoy["mday"];
+                                     //   $hh = " ".$hoy["hours"].":".$hoy["minutes"].":".$hoy["seconds"];
+                                       
+                                     
+                                      if ($hoy > $fila['fecha_hora_expira'])
+                                        {
+                                          if($fila["estado_tarea"]=="Terminada"){
+
+
+                                          }else{
+                                           $id_tareas = escapar($fila["id_tareas"]);
+                                         $consultaSQL1 = "UPDATE  tareas_asignadas SET
+                                        estado_tarea = 'Expirada'
+                                         WHERE id = $id_tareas";
+                                         $sentencia = $conexion -> prepare($consultaSQL1);
+                                         $sentencia -> execute();
+                                        }
+ 
+                                        }
+ 
                                     switch ($fila['estado_tarea'])
                                     {
-                                        case "Por hacer":
-                                          $estado="badge bg-warning";
+                                      case "Por hacer":
+                                        $estado="badge bg-warning";
+                                        break;
+
+                                        case "En progreso":
+
                                           break;
 
-                                          case "En progreso":
-
+                                          case "Terminada":
+                                            $estado="badge bg-success";
                                             break;
 
-                                            case "Terminada":
-
-                                              break;
-
-                                              case "Expirada":
-
-                                                break;
+                                            case "Expirada":
+                                              $estado="badge bg-danger";
 
                                      }
 
@@ -185,9 +232,13 @@ try {
                                     <tr>
                                         <td><?php echo escapar($i);?></td>
                                         <td><?=escapar($fila["nombre_tarea"]);?></td>
+                                        
+                                        <td><?=escapar($fila["username"]);?></td>
+                                         
                                         <td ><span style=" margin-left: 15px;"class="<?=escapar($estilo);?>"><?=escapar($fila["importancia_tarea"]);?></span></td>
                                         <td ><span style=" margin-left: 30px; "  class="<?=escapar($estado);?>"><?=escapar($fila["estado_tarea"]);?></span></td>
-                                        <td >  <a href="<?= 'crear_tareas copy.php?id=' . escapar($fila["id"]) ?>">️️<button type="button" class="btn btn-info ">Ver tarea</button></a></span></td>   
+                                        
+                                        <td >  <a href="<?= 'crear_tareas copy.php?id=' . escapar($fila["id_tareas"]) ?>">️️<button type="button" class="btn btn-info ">Ver tarea</button></a></span></td>   
                                     </tr>
                                     <?php
                                   

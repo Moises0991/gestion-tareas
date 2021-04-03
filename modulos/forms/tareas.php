@@ -166,18 +166,28 @@ try {
                                             break;
 
                                      }
-                                    //  if (($fila['fecha_expira'] != "2021-03-18")  )
-                                    //    {
-                                    //       $id_tarea = escapar($fila["id"]);
-                                    //     $consultaSQL1 = "UPDATE  tareas_asignadas SET
-                                    //    estado_tarea = 'Expirada'
-                                    //     WHERE id = $id_tarea";
-                                    //     $sentencia = $conexion -> prepare($consultaSQL1);
-                                    //     $sentencia -> execute();
+                                     $hoy = date("Y-m-d H:i:00",time());
+                                     
+                                    //  $fff = $hoy["year"]."-0".$hoy["mon"]."-"."0".$hoy["mday"];
+                                    //   $hh = " ".$hoy["hours"].":".$hoy["minutes"].":".$hoy["seconds"];
+                                      
+                                    
+                                     if ($hoy > $fila['fecha_hora_expira'])
+                                       {
+                                        if($fila["estado_tarea"]=="Terminada"){
 
 
+                                        }else{
+                                          $id_tarea = escapar($fila["id"]);
+                                        $consultaSQL1 = "UPDATE  tareas_asignadas SET
+                                       estado_tarea = 'Expirada'
+                                        WHERE id = $id_tarea";
+                                        $sentencia = $conexion -> prepare($consultaSQL1);
+                                        $sentencia -> execute();
+                                          
+                                        }
 
-                                    //    }
+                                       }
 
                                     switch ($fila['estado_tarea'])
                                     {
@@ -190,7 +200,7 @@ try {
                                             break;
 
                                             case "Terminada":
-
+                                              $estado="badge bg-success";
                                               break;
 
                                               case "Expirada":

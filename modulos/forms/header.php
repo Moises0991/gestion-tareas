@@ -300,6 +300,10 @@
             </a>
           </li>
 
+          <!-- aqui modifique el menu -->
+          <?php if(isset($_SESSION['employee']))
+         {
+           ?> 
           <li class="nav-item ">
             <a href="#" class="nav-link">
               <i class="nav-icon far fa-calendar-alt"></i>
@@ -325,6 +329,23 @@
               </li>
             </ul>
           </li>
+<?php
+         }else
+         {
+?>
+             <li class="nav-item">
+                <a href="tareas_globales.php" class="nav-link">
+                  <i class="nav-icon far fa-calendar-alt"></i>
+                  <p>Ver tareas</p>
+                </a>
+              </li>
+
+
+
+<?php
+
+         }
+?>
 
           <li class="nav-item">
             <a href="#" class="nav-link">

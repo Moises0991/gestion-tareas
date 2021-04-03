@@ -103,6 +103,7 @@ CREATE TABLE tareas_asignadas (
   importancia_tarea VARCHAR(20)  NOT NULL, 
   estado_tarea varchar(20) NOT NULL,
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fecha_hora_expira TIMESTAMP,
   fecha_expira VARCHAR(10) NOT NULL,
   hora_expira time,
 
@@ -112,8 +113,16 @@ CREATE TABLE tareas_asignadas (
     REFERENCES employees(id)
 );
 
-
 CREATE TABLE archivos_tareas (
+id_archivo  INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+nombre_archivo varchar(100) not null,
+id_tareas int(12) not null,
+     constraint fk_id_tares foreign KEY (id_tareas)
+    REFERENCES tareas_asignadas(id)
+
+);
+
+CREATE TABLE archivos_tareas_terminadas (
 id_archivo  INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 nombre_archivo varchar(100) not null,
 id_tareas int(12) not null,

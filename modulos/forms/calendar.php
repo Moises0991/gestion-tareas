@@ -4,13 +4,18 @@
 
 
   $config = include 'config.php';
-  $id=$_SESSION['id_employee'];
+
 
   $dns = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
   // a continuacion se crea la variable con el pdo que servira para la conexion a la base de datos
   $conexion = new PDO ($dns, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
 
+  if (isset($_SESSION['id_employee'])){
+    $id=$_SESSION['id_employee'];
   $consultaSQL = "SELECT * FROM tareas_asignadas where id_usuario = $id";
+  }else{
+  $consultaSQL = "SELECT * FROM tareas_asignadas";
+}
   $sentencia = $conexion -> prepare($consultaSQL);
   $sentencia -> execute();
   $tareas = $sentencia -> fetchAll();
@@ -222,7 +227,10 @@ if ($tareas && $sentencia -> rowCount()>0) {
            end            : '<?= escapar($fila['fecha_expira'])?>',
            backgroundColor: '<?=escapar($estilo)?>', //red
            borderColor    : '<?=escapar($estilo)?>', //red
-           allDay         : true
+           allDay         : true,
+           url            : ' <?='crear_tareas copy.php?id=' . escapar($fila["id"])?>',
+          
+
 
        },
  

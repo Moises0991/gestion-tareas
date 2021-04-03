@@ -15,15 +15,8 @@
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
 
-  <!-- chat -->
-	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
-	<!-- jQuery -->
 	<title>Chat</title>
-	<!-- <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
-	<link href="chat/css/style.css" rel="stylesheet" id="bootstrap-css"> -->
 	<script src="chat/js/chat.js"></script>
 
 	<style>
@@ -265,32 +258,41 @@
               </p>
             </a>
           </li>
-
-          <li class="nav-item ">
-            <a href="#" class="nav-link">
-              <i class="nav-icon far fa-calendar-alt"></i>
-              <p>
-                Ver tareas
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="modulos/forms/tareas.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tareas 
-                  <span class="badge badge-info right">2</span>
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item">
+          
+          <?php if(isset($_SESSION['employee'])) { ?> 
+            <li class="nav-item ">
+              <a href="#" class="nav-link">
+                <i class="nav-icon far fa-calendar-alt"></i>
+                <p>
+                  Ver tareas
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="modulos/forms/tareas.php" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Tareas 
+                    <span class="badge badge-info right">2</span>
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="modulos/forms/tareas_globales.php" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Tareas globales</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          <?php }else { ?>
+            <li class="nav-item">
                 <a href="modulos/forms/tareas_globales.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tareas globales</p>
+                  <i class="nav-icon far fa-calendar-alt"></i>
+                  <p>Ver tareas</p>
                 </a>
               </li>
-            </ul>
-          </li>
+          <?php } ?>
 
           <li class="nav-item">
             <a href="#" class="nav-link">

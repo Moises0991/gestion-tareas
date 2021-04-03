@@ -1,4 +1,5 @@
-<?php include 'header.php'?>
+
+<?php include 'header.php';?>
 
  <?php
 //  include 'funciones.php';
@@ -15,7 +16,9 @@
   $conexion = new PDO ($dns, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
 
   // $hoy = getdate();
-  $id =  $_GET['id'];
+ $_SESSION['id_tarea'] =  $_GET['id'];
+ $id =  $_GET['id'];
+  
   $consultaSQL = "SELECT *FROM tareas_asignadas WHERE id=" . $id;
   $sentencia = $conexion -> prepare($consultaSQL);
   $sentencia -> execute();
@@ -28,11 +31,13 @@
   $sentencia1 -> execute();
   $archivos = $sentencia1 -> fetchAll();
 
+  // descripcion_entrega
+
 
  if (isset($_POST['submit'])) { //el isset es una funcion que determina si una variable esta definida o no en el php
          $resultado = [
           'error' => false,
-            'mensaje' => 'La tarea ' . escapar($_POST['nombre']) . ' ha sido creada con éxito'
+            'mensaje' => 'La tarea ' . escapar($tareas['nombre_tarea']) . ' ha sido terminada con éxito'
          ];
             // $nombre_tarea= $_POST['nombre'];
             // $nombre_usuario= $_POST['usuarios'];
@@ -52,8 +57,9 @@
             //  $sentencia = $conexion -> prepare($consultaSQL);
             //  $sentencia -> execute();
             //  $empleados = $sentencia -> fetchAll();
-
-        
+            $consultaSQL3 = " UPDATE tareas_asignadas set estado_tarea = 'Terminada', update_at = NOW() where id= " . $id;
+            $sentencia3 = $conexion -> prepare($consultaSQL3);
+            $sentencia3 -> execute();
     }
 
 
@@ -123,7 +129,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="POST" enctype="multipart/form-data">
+              <form method="" >
                 <div class="card-body">
                 
                   <div class="form-group">
@@ -185,14 +191,18 @@
                              <br> <a href="<?= '../tareas/' . escapar($fila["nombre_archivo"])?>"> <?php echo escapar($fila['nombre_archivo'])?></a>
 
 
-                        <?php
+<?php
                             }
                           }else{
 
                                 echo "<br>no hay archivos adjuntos";
 
                           }
-                        ?>
+                     
+                     ?>
+
+
+
 
                                       </div>
               
@@ -200,13 +210,122 @@
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
                   <button type="submit" name="submit" class="btn btn-primary">Crear tarea</button>
                 </div>
               </form>
             </div>
-            
+<!-- 1- agregue el modulo para subir el archivo de tarea terminada
+2- cree una carpeta "tareas_terminadas
+3- cree una nueva tabla "archivos_tareas_terminadas"
+4- duplique el archivo de "subir_archivos.php" y lo reenombre a "subir_archivos_terminados"
+5- puto el que me escuche 
+6- agregue el valor $sesion{id_tarea}
+7- agregue un formulario para enviar los comentarios a la bd
+8- edite la parte del issete sumbit
+9- falta reestringir que los usuarios no puedan subir tareas que no son de ellos... usar un if($_sesion{"id"} == $tareas['id_usuario'] entonces mostrara el apartado de terminar tarea, sino no lo muestra )
+10- agregar if para mostrar los archivos subidos por los empleados: si el estatus tarea= a terminada entonces mostrar la entrega y archivos subidos-->
 
+
+<?php 
+
+    if(isset($_SESSION['id_employee']) && $tareas['id_usuario']==$_SESSION['id_employee'] )
+    {
+
+?>
+
+          <form method="post" id="CreateForm">
+
+            <div class="card-body">
+            <div class="form-group">
+                    <label>Entregar tarea</label>
+                    <br>
+                    <div class="form-group">
+                    <label>Comentarios de la tarea</label>
+                    <textarea class="form-control" rows="3" name="descripcion_entrega" placeholder="Enter ..."></textarea>
+                  </div>
+</div>
+
+            </DIV>
+            <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
+
+            </form>
+<!-- aqui va el modulo de sbuir tareas  -->
+<div class="row">
+          <div class="col-md-12">
+            <div class="card card-default">
+              <div class="card-header">
+                <h3 class="card-title">Subir contenido extra <small><em>(Cualquier tipo de archivo)</em> </small></h3>
+              </div>
+              <div class="card-body">
+                <div id="actions" class="row">
+                  <div class="col-lg-6">
+                    <div class="btn-group w-100">
+                      <span class="btn btn-success col fileinput-button">
+                        <i class="fas fa-plus"></i>
+                        <span>Add files</span>
+                      </span>
+                    
+                      <button type="submit"   class="btn btn-primary col start">
+                        <i class="fas fa-upload"></i>
+                        <span>Start upload</span>
+                      </button>
+                      <button type="reset" class="btn btn-warning col cancel">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Cancel upload</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 d-flex align-items-center">
+                    <div class="fileupload-process w-100">
+                      <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="table table-striped files" id="previews">
+                  <div id="template" class="row mt-2">
+                    <div class="col-auto">
+                        <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
+                    </div>
+                    <div class="col d-flex align-items-center">
+                        <p class="mb-0">
+                          <span class="lead" data-dz-name></span>
+                          (<span data-dz-size></span>)
+                        </p>
+                        <strong class="error text-danger" data-dz-errormessage></strong>
+                    </div>
+                    <div class="col-4 d-flex align-items-center">
+                        <div class="progress progress-striped active w-100" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                          <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                        </div>
+                    </div>
+                    <div class="col-auto d-flex align-items-center">
+                      <div class="btn-group">
+                        <button class="btn btn-primary start">
+                          <i class="fas fa-upload"></i>
+                          <span>Start</span>
+                        </button>
+                        <button data-dz-remove class="btn btn-warning cancel">
+                          <i class="fas fa-times-circle"></i>
+                          <span>Cancel</span>
+                        </button>
+                        <button data-dz-remove class="btn btn-danger delete">
+                          <i class="fas fa-trash"></i>
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <!-- aqui termina el modulo de subir -->
+             
+              <button type="submit" name="submit" form="CreateForm" class="btn btn-primary">Entregar tarea</button>
+<?php
+ }
+?>
           
           </div>
           <!--/.col (right) -->
@@ -351,14 +470,15 @@
   previewNode.parentNode.removeChild(previewNode)
 
   var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-    url: "/target-url", // Set the url
+      
+    url: "subir_archivo_terminados.php", // Set the url
     thumbnailWidth: 80,
     thumbnailHeight: 80,
     parallelUploads: 20,
     previewTemplate: previewTemplate,
     autoQueue: false, // Make sure the files aren't queued until manually added
     previewsContainer: "#previews", // Define the container to display the previews
-    clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+    clickable: ".fileinput-button", // Define the element that should be used as click trigger to select files.
   })
 
   myDropzone.on("addedfile", function(file) {

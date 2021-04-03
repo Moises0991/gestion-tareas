@@ -33,11 +33,12 @@
             $importancia_tarea =$_POST['importancia'];
             $fecha_termina=$_POST['fecha_expira'];
             $hora_termina = $_POST['hora_termina'];
+            $fecha_hora_termina =$fecha_termina." ".$hora_termina;
             // $file_name = $_FILES['file']['name'];
             // $file_tmp =$_FILES['file']['tmp_name'];
             // $ruta = "../tareas/". $file_name;
             // move_uploaded_file($file_tmp,$ruta);
-            $consultaSQL = "INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea,estado_tarea,fecha_expira,hora_expira) VALUES ('$nombre_tarea','$nombre_usuario','$descripcion_tarea','$importancia_tarea','Por hacer','$fecha_termina','$hora_termina')";
+            $consultaSQL = "INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea,estado_tarea,fecha_expira,hora_expira,fecha_hora_expira) VALUES ('$nombre_tarea','$nombre_usuario','$descripcion_tarea','$importancia_tarea','Por hacer','$fecha_termina','$hora_termina','$fecha_hora_termina')";
             
              $conexion->query($consultaSQL);
 
