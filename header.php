@@ -219,7 +219,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" style="display:none">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
               <p>
@@ -319,7 +319,7 @@
               </li>
           <?php } ?>
 
-          <li class="nav-item">
+          <li class="nav-item" style="display:none">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-book"></i>
               <p>

@@ -176,7 +176,7 @@
                   </ul>
                 </div>
               </div><!-- /.card-header -->
-                <iframe src="pages/examples/uplot_copy.html" width="100%" height="300" scrolling="no" style="border:none" >
+                <iframe src="pages/examples/uplot_copy.php" width="100%" height="300" scrolling="no" style="border:none" >
               </iframe>
               <div class="card-body" style="padding:0px">
               </div><!-- /.card-body -->
