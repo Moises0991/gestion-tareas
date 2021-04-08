@@ -14,11 +14,56 @@
   $dns = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
   // a continuacion se crea la variable con el pdo que servira para la conexion a la base de datos
   $conexion = new PDO ($dns, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+ 
 
   // $hoy = getdate();
  $_SESSION['id_tarea'] =  $_GET['id'];
  $id =  $_GET['id'];
+
   
+ $hoy = getdate();
+ 
+  if (isset($_POST['submit'])) { //el isset es una funcion que determina si una variable esta definida o no en el php
+    $resultado = [
+     'error' => false,
+       'mensaje' => 'La tarea ha sido actualizada con éxito'
+    ];
+    $id = $_SESSION['id_tarea'];
+
+       $nombre_tarea= $_POST['nombre'];
+       $nombre_usuario= $_POST['usuarios'];
+       $descripcion_tarea =$_POST['descripcion'];
+       $importancia_tarea =$_POST['importancia'];
+       $fecha_termina=$_POST['fecha_expira'];
+       $hora_termina = $_POST['hora_termina'];
+       $fecha_hora_termina =$fecha_termina." ".$hora_termina;
+
+       // $file_name = $_FILES['file']['name'];
+       // $file_tmp =$_FILES['file']['tmp_name'];
+       // $ruta = "../tareas/". $file_name;
+       // move_uploaded_file($file_tmp,$ruta);
+       // $consultaSQL = "INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea,estado_tarea,fecha_expira,hora_expira,archivo) VALUES ('$nombre_tarea','$nombre_usuario','$descripcion_tarea','$importancia_tarea','Por hacer','$fecha_termina','$hora_termina','$file_name')";
+       
+       //  $conexion->query($consultaSQL);
+
+       //  $consultaSQL = "SELECT * FROM employees";
+       //  $sentencia = $conexion -> prepare($consultaSQL);
+       //  $sentencia -> execute();
+       //  $empleados = $sentencia -> fetchAll();
+       $consultaSQL3 = " UPDATE tareas_asignadas set 
+       nombre_tarea = '$nombre_tarea',
+       id_usuario = '$nombre_usuario',
+       descripcion_tarea = '$descripcion_tarea',
+       importancia_tarea = '$importancia_tarea',
+       estado_tarea = 'Por hacer',
+       fecha_expira = '$fecha_termina',
+       hora_expira = '$hora_termina',
+       fecha_hora_expira = '$fecha_hora_termina',
+        update_at = NOW() where id= " . $id;
+       $sentencia3 = $conexion -> prepare($consultaSQL3);
+       $sentencia3 -> execute();
+}
+
   $consultaSQL = "SELECT *FROM tareas_asignadas WHERE id=" . $id;
   $sentencia = $conexion -> prepare($consultaSQL);
   $sentencia -> execute();
@@ -31,36 +76,22 @@
   $sentencia1 -> execute();
   $archivos = $sentencia1 -> fetchAll();
 
+
+  $id_usuario = $tareas["id_usuario"];
+  $usuarios= "SELECT *from employees where id <> $id_usuario" ;
+  $sentencia2 = $conexion -> prepare($usuarios);
+
+  $sentencia2 -> execute();
+  $usuario = $sentencia2 ->  fetchAll();
+
+  $usuariosr= "SELECT *from employees where id = $id_usuario";
+  $sentencia4 = $conexion -> prepare($usuariosr);
+
+  $sentencia4 -> execute();
+  $usuario_solo = $sentencia4 ->  fetch(PDO::FETCH_ASSOC);
+
   // descripcion_entrega
 
-
- if (isset($_POST['submit'])) { //el isset es una funcion que determina si una variable esta definida o no en el php
-         $resultado = [
-          'error' => false,
-            'mensaje' => 'La tarea ' . escapar($tareas['nombre_tarea']) . ' ha sido terminada con éxito'
-         ];
-            // $nombre_tarea= $_POST['nombre'];
-            // $nombre_usuario= $_POST['usuarios'];
-            // $descripcion_tarea =$_POST['descripcion'];
-            // $importancia_tarea =$_POST['importancia'];
-            // $fecha_termina=$_POST['fecha_expira'];
-            // $hora_termina = $_POST['hora_termina'];
-            // $file_name = $_FILES['file']['name'];
-            // $file_tmp =$_FILES['file']['tmp_name'];
-            // $ruta = "../tareas/". $file_name;
-            // move_uploaded_file($file_tmp,$ruta);
-            // $consultaSQL = "INSERT INTO tareas_asignadas (nombre_tarea, id_usuario, descripcion_tarea, importancia_tarea,estado_tarea,fecha_expira,hora_expira,archivo) VALUES ('$nombre_tarea','$nombre_usuario','$descripcion_tarea','$importancia_tarea','Por hacer','$fecha_termina','$hora_termina','$file_name')";
-            
-            //  $conexion->query($consultaSQL);
-
-            //  $consultaSQL = "SELECT * FROM employees";
-            //  $sentencia = $conexion -> prepare($consultaSQL);
-            //  $sentencia -> execute();
-            //  $empleados = $sentencia -> fetchAll();
-            $consultaSQL3 = " UPDATE tareas_asignadas set estado_tarea = 'Terminada', update_at = NOW() where id= " . $id;
-            $sentencia3 = $conexion -> prepare($consultaSQL3);
-            $sentencia3 -> execute();
-    }
 
 
 
@@ -85,12 +116,12 @@
       
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Crear tareas</h1>
+            <h1>Editando la tarea "<?= escapar($tareas["nombre_tarea"]);?>"</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Crear tareas</li>
+              <li class="breadcrumb-item active">Editar tarea</li>
             </ol>
           </div>
         </div>
@@ -125,22 +156,33 @@
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Crear tarea</h3>
+                <h3 class="card-title">Editando tarea</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="" >
+              <form method="post" id="CreateForm">
                 <div class="card-body">
                 
                   <div class="form-group">
                     <label>Nombre de la tarea</label>
-                    <input type="text" class="form-control" value="<?= escapar($tareas["nombre_tarea"]);?>" >
+                    <input type="text" class="form-control" value="<?= escapar($tareas["nombre_tarea"]);?>" name="nombre" >
                   </div>
 
                   <div class="form-group">
                     <label>Usuario</label>
-                    <input type="text" class="form-control" value="<?= escapar($tareas["nombre_tarea"]);?>" >
-
+                    <select class="form-control" name="usuarios">
+                    <option value="<?php echo escapar($usuario_solo["id"])?>"><?php echo escapar($usuario_solo["username"]);?></option>
+                    <?php
+                            if ($usuario && $sentencia2 -> rowCount()>0) {
+                              
+                                foreach ($usuario as $fila) {
+                                    ?>
+                                     <option value="<?php echo escapar($fila["id"])?>"><?php echo escapar($fila["username"]);?></option>
+                    <?php
+                                }
+                            }
+                        ?>
+                    </select>
                   </div> 
 
                   <div class="form-group">
@@ -152,6 +194,9 @@
                   <div class="form-group">
                     <label>importancia</label>
                     <select class="form-control" name="importancia">
+                    <option value="<?= escapar($tareas["importancia_tarea"]);?>"><?= escapar($tareas["importancia_tarea"]);?></option>
+                    <option value="Baja">Baja</option>
+     
                       <option value="Normal">Normal</option>
                       <option value="Alta">Alta</option>
                       <option value="Urgente">Urgente</option>
@@ -160,29 +205,48 @@
                   </div> 
 
                   <div class="form-group">
-                    <label>Fecha de la creacion</label>
-                    <input type="text" class="form-control" placeholder="<?=escapar($hoy["mday"]);?>-0<?=escapar($hoy["mon"]);?>-<?=escapar($hoy["year"]);?>" disabled>
+                    <label>Fecha y hora de la creacion</label>
+                    <input type="text" class="form-control" value="<?= escapar($tareas["fecha_creacion"]);?>" disabled>
                   </div>
 
                   <div class="row ">
                     <div class="col-sm-6">
                     <div class="form-group">
-                       <label>Fecha en la que expira:</label>
+                       <label>Fecha en la que expiro:</label>
+                           <input class="form-control" type="text" value="<?= escapar($tareas["fecha_expira"]);?>"disabled/>
+                          </div>
+                          </div>
+                        
+                    <div class="col-sm-6">
+                    <label>Hora en la que expiro:</label>
+                      <input class="form-control" type="text" value="<?= escapar($tareas["hora_expira"]);?>" disabled/>
+                          </div>
+                          </div>
+                          <div class="form-group">
+
+                    <label>Fecha de edicion</label>
+                    <input type="text" class="form-control" value="<?=escapar($hoy["mday"]);?>-0<?=escapar($hoy["mon"]);?>-<?=escapar($hoy["year"]);?>" disabled>
+                  </div>
+
+                  <div class="row ">
+                    <div class="col-sm-6">
+                    <div class="form-group">
+                       <label>Nueva fecha expira:</label>
                            <input class="form-control" type="date" min="<?=escapar($hoy["year"]);?>-0<?=escapar($hoy["mon"]);?>-<?=escapar($hoy["mday"]);?>"  name="fecha_expira">
                           </div>
                           </div>
                         
                     <div class="col-sm-6">
-                    <label>Hora en la que expira:</label>
-                      <input class="form-control" type="time" name="hora_termina" min="<?=escapar($hoy["hours"]);?>:<?=escapar($hoy["minutes"]);?>" max="00:00" step="" />
+                    <label>Nueva hora expira:</label>
+                      <input class="form-control" type="time" name="hora_termina" step="" />
                           </div>
-                         
-                 </div>
+                          </div>
+                
                          
                   
 
                   <div class="form-group">
-                    <label for="exampleInputFile">Archivos Adjuntos</label>
+                    <label for="exampleInputFile">Archivos anteriores adjuntos</label>
                      <?php
                         if ($archivos && $sentencia1 -> rowCount()>0) {
                             foreach ($archivos as $fila) {
@@ -191,7 +255,7 @@
                              <br> <a href="<?= '../tareas/' . escapar($fila["nombre_archivo"])?>"> <?php echo escapar($fila['nombre_archivo'])?></a>
 
 
-<?php
+                          <?php
                             }
                           }else{
 
@@ -205,15 +269,13 @@
 
 
                                       </div>
-              
+                                      <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
+
+</form>
                 </div>
                 <!-- /.card-body -->
 
-                <div class="card-footer">
-                  <button type="submit" name="submit" class="btn btn-primary">Crear tarea</button>
-                </div>
-              </form>
-            </div>
+                
 <!-- 1- agregue el modulo para subir el archivo de tarea terminada
 2- cree una carpeta "tareas_terminadas
 3- cree una nueva tabla "archivos_tareas_terminadas"
@@ -226,14 +288,8 @@
 10- agregar if para mostrar los archivos subidos por los empleados: si el estatus tarea= a terminada entonces mostrar la entrega y archivos subidos-->
 
 
-<?php 
 
-    if(isset($_SESSION['id_employee']) && $tareas['id_usuario']==$_SESSION['id_employee'] )
-    {
-
-?>
-
-          <form method="post" id="CreateForm">
+          <!-- <form method="post" id="CreateForm">
 
             <div class="card-body">
             <div class="form-group">
@@ -248,7 +304,7 @@
             </DIV>
             <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
 
-            </form>
+            </form> -->
 <!-- aqui va el modulo de sbuir tareas  -->
 <div class="row">
           <div class="col-md-12">
@@ -322,11 +378,14 @@
               </div>
               <!-- aqui termina el modulo de subir -->
              
-              <button type="submit" name="submit" form="CreateForm" class="btn btn-primary">Entregar tarea</button>
-<?php
- }
-?>
-          
+
+              <div class="card-footer">
+                <button type="submit" name="submit" form="CreateForm" class="btn btn-primary">Editar tarea</button>
+
+                  <!-- <button type="submit" name="submit" class="btn btn-primary">Editar tarea</button> -->
+                </div>
+                
+            </div>
           </div>
           <!--/.col (right) -->
         </div>
@@ -471,7 +530,7 @@
 
   var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
       
-    url: "subir_archivo_terminados.php", // Set the url
+    url: "subir_archivo copy.php", // Set the url
     thumbnailWidth: 80,
     thumbnailHeight: 80,
     parallelUploads: 20,

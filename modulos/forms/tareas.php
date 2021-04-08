@@ -174,19 +174,16 @@ try {
                                     
                                      if ($hoy > $fila['fecha_hora_expira'])
                                        {
-                                        if($fila["estado_tarea"]=="Terminada"){
-
-
-                                        }else{
+                                        if($fila["estado_tarea"]=="Por hacer" || $fila["estado_tarea"]=="En progreso" ){
                                           $id_tarea = escapar($fila["id"]);
-                                        $consultaSQL1 = "UPDATE  tareas_asignadas SET
-                                       estado_tarea = 'Expirada'
-                                        WHERE id = $id_tarea";
-                                        $sentencia = $conexion -> prepare($consultaSQL1);
-                                        $sentencia -> execute();
-                                          
-                                        }
+                                          $consultaSQL1 = "UPDATE  tareas_asignadas SET
+                                         estado_tarea = 'Expirada'
+                                          WHERE id = $id_tarea";
+                                          $sentencia = $conexion -> prepare($consultaSQL1);
+                                          $sentencia -> execute();
+                                            
 
+                                        }
                                        }
 
                                     switch ($fila['estado_tarea'])
@@ -196,6 +193,7 @@ try {
                                           break;
 
                                           case "En progreso":
+                                            $estado="badge bg-primary";
 
                                             break;
 
@@ -221,7 +219,7 @@ try {
                                         <td><?=escapar($fila["nombre_tarea"]);?></td>
                                         <td ><span style=" margin-left: 15px;"class="<?=escapar($estilo);?>"><?=escapar($fila["importancia_tarea"]);?></span></td>
                                         <td ><span style=" margin-left: 30px; "  class="<?=escapar($estado);?>"><?=escapar($fila["estado_tarea"]);?></span></td>
-                                        <td >  <a href="<?= 'crear_tareas copy.php?id=' . escapar($fila["id"]) ?>">️️<button type="button" class="btn btn-info ">Ver tarea</button></a></span></td>   
+                                        <td >  <a href="<?= 'ver_tareas.php?id=' . escapar($fila["id"]) ?>">️️<button type="button" class="btn btn-info ">Ver tarea</button></a></span></td>   
                                     </tr>
                                     <?php
                                   

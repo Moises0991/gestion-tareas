@@ -1,0 +1,33 @@
+  <div class="form-register">
+<div class="row">
+    <h4>Registro</h4>
+    <h5>Datos del usuario</h5>
+ <div class="distancia">
+  <label for="nombres">Nombre</label>
+    <input class="controls" type="text" name="nombres" id="nombres" placeholder="Nombre"> 
+    <input class="controls" type="email" name="correo" id="correo" placeholder="Correo">
+    <input class="controls" type="number" min="18" name="edad" id="edad" placeholder="Edad">
+ </div>
+
+ <div class="distancia">
+  <input class="controls" type="text" name="apellidos" id="apellidos" placeholder="Apellidos">
+  <input class="controls" type="text" name="telefono" id="telefono" placeholder="Telefono">
+  <input type="radio" id="male" name="gender" value="male">
+  <label for="male">Male</label>
+  <input type="radio" id="female" name="gender" value="female">
+  <label for="female">Female</label>
+ </div>
+</div>
+
+</div>
+    <h5>Informacion de la cuenta</h5>
+    <input class="controls" type="text" name="nombres" id="usuario" placeholder="Nombre de usuario">
+    <input class="controls" type="password" name="correo" id="correo" placeholder="Contraseña">
+    <input class="controls" type="password" name="correo" id="correo" placeholder="Confirmar contraseña">
+    <input class="controls" type="text" name="tipo" id="tipo" placeholder="Tipo de usuario">
+
+    <h5>Acerca del empleado</h5>  
+
+    <input class="comment" type="text" name="comentario" id="comentario" placeholder="Observaciones (opcional)">
+    <input class="boton1" type="submit" value="Aceptar registro">
+    <input class="boton2" type="submit" value="Rechazar registro">

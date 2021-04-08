@@ -23,13 +23,20 @@
     $_SESSION['expire'] = $_SESSION['start'] + (5*60);
   }
 
+  include '../../login/data/config.php';
   if (isset($_SESSION['manager'])) {
     $username = $_SESSION['username'];
     $nickname = $_SESSION['manager'];
+    $sql = "SELECT * FROM managers WHERE nickname = '$nickname'";
+    $query = $conection -> query($sql);
+    $row = $query -> fetch_array(MYSQLI_ASSOC);
 
   } else if (isset($_SESSION['employee'])) {
     $username = $_SESSION['username'];
     $nickname = $_SESSION['employee'];
+    $sql = "SELECT * FROM employees WHERE nickname = '$nickname'";
+    $query = $conection -> query($sql);
+    $row = $query -> fetch_array(MYSQLI_ASSOC);
   }
 
 ?>
@@ -65,6 +72,8 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
   <link rel="stylesheet" href="../../plugins/fullcalendar/main.css">
+  <link rel="stylesheet" href="style.css">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -215,7 +224,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../../pages../examples/view.php?nickname='<?=$nickname?>'" style="object-fit: cover; width:33px; height: 33px;" class="img-circle elevation-2" alt="User Image">
+          <img src="../../img/avatars/<?=$row['avatar']?>" style="object-fit: cover; width:33px; height: 33px;" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="../../pages/examples/profile.php" class="d-block" style="text-transform: capitalize;"><?=$username?></a>

@@ -228,7 +228,7 @@ if ($tareas && $sentencia -> rowCount()>0) {
            backgroundColor: '<?=escapar($estilo)?>', //red
            borderColor    : '<?=escapar($estilo)?>', //red
            allDay         : true,
-           url            : ' <?='crear_tareas copy.php?id=' . escapar($fila["id"])?>',
+           url            : ' <?='ver_tareas.php?id=' . escapar($fila["id"])?>',
           
 
 

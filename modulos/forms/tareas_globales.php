@@ -153,7 +153,19 @@ try {
                       <th>Empleado</th>
                       <th>Importancia</th>
                       <th >Estatus de entrega</th>
+                      <?php
+                      if (isset($_SESSION['id_employee'])){
+                        ?>
                       <th>Acciones</th>
+                      <?php
+                      }else{
+                        ?>
+                     <th>Accion</th>
+                     <th>Accion</th>
+
+<?php
+                      }
+                        ?>
                     </tr>
                   </thead>
                   <tbody>
@@ -213,6 +225,7 @@ try {
                                         break;
 
                                         case "En progreso":
+                                          $estado="badge bg-primary";
 
                                           break;
 
@@ -238,10 +251,17 @@ try {
                                         <td ><span style=" margin-left: 15px;"class="<?=escapar($estilo);?>"><?=escapar($fila["importancia_tarea"]);?></span></td>
                                         <td ><span style=" margin-left: 30px; "  class="<?=escapar($estado);?>"><?=escapar($fila["estado_tarea"]);?></span></td>
                                         
-                                        <td >  <a href="<?= 'crear_tareas copy.php?id=' . escapar($fila["id_tareas"]) ?>">️️<button type="button" class="btn btn-info ">Ver tarea</button></a></span></td>   
+                                        <td >  <a href="<?= 'ver_tareas.php?id=' . escapar($fila["id_tareas"]) ?>">️️<button type="button" class="btn btn-info ">Ver tarea</button></a></span></td>   
+                                     
+                                     <?php
+
+                                    if (isset($_SESSION['manager'])){
+                                      ?>
+                                        <td >  <a href="<?= 'crear_tareas copy.php?id=' . escapar($fila["id_tareas"]) ?>">️️<button type="button" class="btn btn-warning ">editar tarea</button></a></span></td>   
+
                                     </tr>
                                     <?php
-                                  
+                                    }
                                 }
                               }
                                   ?>

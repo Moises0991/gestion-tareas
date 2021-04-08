@@ -37,6 +37,7 @@ CREATE TABLE employees (
     avatar varchar(255) NOT NULL,
     -- TIMESTAMP es un tipo de dato que contiene fecha y hora
     -- La función CURRENT_TIMESTAMP devuelve la fecha y la hora local actual 
+    last_conection TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 );
@@ -97,9 +98,9 @@ COMMIT;
 CREATE TABLE tareas_asignadas (
   -- UNSIGNED sirve para permitir solo valores positivos (sin signo)
   id INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-  nombre_tarea VARCHAR(30) NOT NULL,
+  nombre_tarea VARCHAR(300) NOT NULL,
   id_usuario INT(12) NOT NULL,
-  descripcion_tarea VARCHAR(50) NOT NULL,
+  descripcion_tarea VARCHAR(500) NOT NULL,
   importancia_tarea VARCHAR(20)  NOT NULL, 
   estado_tarea varchar(20) NOT NULL,
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -130,3 +131,13 @@ id_tareas int(12) not null,
     REFERENCES tareas_asignadas(id)
 
 );
+
+CREATE TABLE comentarios_tarea(
+id_comentario  INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+comentario varchar(500) not null,
+nombre_usuarios varchar (80) not null,
+id_tareas int(12)not null,  
+     
+    constraint fk_id_tareas foreign KEY (id_tareas)
+    REFERENCES tareas_asignadas(id)
+    );

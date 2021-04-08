@@ -538,6 +538,7 @@
               <div class="card-body p-0" style="overflow:auto; max-height: 321px">
                 <ul class="users-list clearfix">
 
+
                   <?php 
                   $all_managers = "SELECT * FROM managers";
                   $result_managers = mysqli_query($conection, $all_managers);
@@ -563,6 +564,26 @@
 
                   if (mysqli_num_rows($result_employees) > 0) {
                       while($row_employee = mysqli_fetch_assoc($result_employees)){
+
+                        // CONNECTION TIME
+                        // $timeLimit = 30; // minutes
+                        // $time = time() ;
+                        // $limit = $time-$timeLimit*60 ;
+
+
+                        // // $sql_update = "UPDATE employees SET last_conection = now()";
+                        // // $sentence = $conection -> prepare($sql_update);
+                        // // $sentence -> execute();
+
+                        // if($row_employee['last_conection'] > $limit) {
+                        //   echo 'la conexion es mayor';
+                        // } else if ($row_employee['last_conection'] < $limit) {
+                        //   echo 'la conexion es menor';
+
+                        // } else {
+                        //   echo 'esta madre no sirve, mejor matate';
+                        // }
+
                         ?>
                           <li>
                             <img

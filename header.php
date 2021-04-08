@@ -374,6 +374,33 @@
               </p>
             </a>
           </li>
+          <?php if(isset($_SESSION['managers'])) { ?> 
+            <li class="nav-item ">
+              <a href="#" class="nav-link">
+                <i class="nav-icon far fa-calendar-alt"></i>
+                <p>
+                  Nuevos Usuarios
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="modulos/forms/tareas.php" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Registrar Nuevo Usuario 
+                    <span class="badge badge-info right">2</span>
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="modulos/forms/tareas_globales.php" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Aceptar Usuarios Nuevos</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          <?php } ?>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
