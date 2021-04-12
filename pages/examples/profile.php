@@ -972,7 +972,7 @@
                 <ul class="nav nav-pills">
                   <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Social</a></li>
                   <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Actividad</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Editar Perfil</a></li>
+                  <li class="nav-item"><a class="nav-link " href="#settings" data-toggle="tab">Editar Perfil</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">

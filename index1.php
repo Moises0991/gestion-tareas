@@ -42,6 +42,7 @@
     $sql = "SELECT * FROM employees WHERE nickname = '$nickname'";
     $query = $conection -> query($sql);
     $row = $query -> fetch_array(MYSQLI_ASSOC);
+    $id_employee = $row['id'];
   
     // consulta
     $sql = "SELECT count(*) total FROM employees";
@@ -105,7 +106,7 @@
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="modulos/forms/tareas.php" class="small-box-footer">Ver todas <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="modulos/forms/tareas_globales.php" class="small-box-footer">Ver todas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -119,7 +120,7 @@
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="modulos/forms/tareas.php" class="small-box-footer">Ver todas <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="modulos/forms/tareas_globales.php" class="small-box-footer">Ver todas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
             <!-- ./col -->
@@ -133,7 +134,7 @@
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="modulos/forms/tareas.php" class="small-box-footer">Ver todas <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="modulos/forms/tareas_globales.php" class="small-box-footer">Ver todas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -148,7 +149,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="modulos/forms/tareas.php" class="small-box-footer">Ver todas <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="modulos/forms/tareas_globales.php" class="small-box-footer">Ver todas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -318,114 +319,69 @@
                   </div>
                 </div>
                 <!-- /.card-header -->
+
                 <div class="card-body">
                   <ul class="todo-list" data-widget="todo-list">
-                    <li>
-                      <!-- drag handle -->
-                      <span class="handle">
-                        <i class="fas fa-ellipsis-v"></i>
-                        <i class="fas fa-ellipsis-v"></i>
-                      </span>
-                      <!-- checkbox -->
-                      <div  class="icheck-primary d-inline ml-2">
-                        <input type="checkbox" value="" name="todo1" id="todoCheck1">
-                        <label for="todoCheck1"></label>
-                      </div>
-                      <!-- todo text -->
-                      <span class="text">Design a nice theme</span>
-                      <!-- Emphasis label -->
-                      <small class="badge badge-danger"><i class="far fa-clock"></i> 2 mins</small>
-                      <!-- General tools such as edit or delete-->
-                      <div class="tools">
-                        <i class="fas fa-edit"></i>
-                        <i class="fas fa-trash-o"></i>
-                      </div>
-                    </li>
-                    <li>
-                      <span class="handle">
-                        <i class="fas fa-ellipsis-v"></i>
-                        <i class="fas fa-ellipsis-v"></i>
-                      </span>
-                      <div  class="icheck-primary d-inline ml-2">
-                        <input type="checkbox" value="" name="todo2" id="todoCheck2" checked>
-                        <label for="todoCheck2"></label>
-                      </div>
-                      <span class="text">Make the theme responsive</span>
-                      <small class="badge badge-info"><i class="far fa-clock"></i> 4 hours</small>
-                      <div class="tools">
-                        <i class="fas fa-edit"></i>
-                        <i class="fas fa-trash-o"></i>
-                      </div>
-                    </li>
-                    <li>
-                      <span class="handle">
-                        <i class="fas fa-ellipsis-v"></i>
-                        <i class="fas fa-ellipsis-v"></i>
-                      </span>
-                      <div  class="icheck-primary d-inline ml-2">
-                        <input type="checkbox" value="" name="todo3" id="todoCheck3">
-                        <label for="todoCheck3"></label>
-                      </div>
-                      <span class="text">Let theme shine like a star</span>
-                      <small class="badge badge-warning"><i class="far fa-clock"></i> 1 day</small>
-                      <div class="tools">
-                        <i class="fas fa-edit"></i>
-                        <i class="fas fa-trash-o"></i>
-                      </div>
-                    </li>
-                    <li>
-                      <span class="handle">
-                        <i class="fas fa-ellipsis-v"></i>
-                        <i class="fas fa-ellipsis-v"></i>
-                      </span>
-                      <div  class="icheck-primary d-inline ml-2">
-                        <input type="checkbox" value="" name="todo4" id="todoCheck4">
-                        <label for="todoCheck4"></label>
-                      </div>
-                      <span class="text">Let theme shine like a star</span>
-                      <small class="badge badge-success"><i class="far fa-clock"></i> 3 days</small>
-                      <div class="tools">
-                        <i class="fas fa-edit"></i>
-                        <i class="fas fa-trash-o"></i>
-                      </div>
-                    </li>
-                    <li>
-                      <span class="handle">
-                        <i class="fas fa-ellipsis-v"></i>
-                        <i class="fas fa-ellipsis-v"></i>
-                      </span>
-                      <div  class="icheck-primary d-inline ml-2">
-                        <input type="checkbox" value="" name="todo5" id="todoCheck5">
-                        <label for="todoCheck5"></label>
-                      </div>
-                      <span class="text">Check your messages and notifications</span>
-                      <small class="badge badge-primary"><i class="far fa-clock"></i> 1 week</small>
-                      <div class="tools">
-                        <i class="fas fa-edit"></i>
-                        <i class="fas fa-trash-o"></i>
-                      </div>
-                    </li>
-                    <li>
-                      <span class="handle">
-                        <i class="fas fa-ellipsis-v"></i>
-                        <i class="fas fa-ellipsis-v"></i>
-                      </span>
-                      <div  class="icheck-primary d-inline ml-2">
-                        <input type="checkbox" value="" name="todo6" id="todoCheck6">
-                        <label for="todoCheck6"></label>
-                      </div>
-                      <span class="text">Let theme shine like a star</span>
-                      <small class="badge badge-secondary"><i class="far fa-clock"></i> 1 month</small>
-                      <div class="tools">
-                        <i class="fas fa-edit"></i>
-                        <i class="fas fa-trash-o"></i>
-                      </div>
-                    </li>
+
+
+                    <?php
+                      include ('chat/Chat.php');
+                      $chat = new Chat();
+                      $tasks = $chat->getTasks($id_employee);
+                      $number = 0;
+                      $importance = '';
+                      $style = '';
+
+                      foreach ($tasks as $task) {
+                        if (!($task['estado_tarea'] == 'Terminada' || $task['estado_tarea'] == 'Expirada')) {
+
+                          switch ($task['importancia_tarea']) {
+                            case "Baja": $style = "badge bg-purple"; $importance = 'baja'; break;
+                            case "Normal": $style = "badge bg-success"; $importance = 'nomal'; break;
+                            case "Alta": $style = "badge bg-warning"; $importance = 'alta'; break;
+                            case "Urgente": $style = "badge bg-orange"; $importance = 'urgente'; break;
+                            case "Inmediata": $style = "badge bg-danger"; $importance = 'inmediata'; break;
+                          }
+
+                          $number++;
+
+                          echo '
+                            <li class="tasks id'.$task['id'].'">
+                              <!-- drag handle -->
+                              <span class="handle">
+                                <i class="fas fa-ellipsis-v"></i>
+                                <i class="fas fa-ellipsis-v"></i>
+                              </span>
+                              <!-- checkbox -->
+                              <div  class="icheck-primary d-inline ml-2">
+                                <input type="checkbox" value="'.$task['id'].'" name="todo'.$number.'" id="todoCheck'.$number.'">
+                                <input type="hidden" class="userId" value="'.$task['id_usuario'].'">
+                                <label for="todoCheck'.$number.'"></label>
+                              </div>
+                              <!-- todo text -->
+                              <span class="text">'.$task['nombre_tarea'].'</span>
+                              <!-- Emphasis label -->
+                              <small class="'.$style.'" style="text-transform:capitalize"><i class="far fa-clock"></i> '.$importance.'</small>
+                              <!-- General tools such as edit or delete-->
+                              <div class="tools">
+                                <i class="fas fa-edit"></i>
+                                <i class="fas fa-trash-o"></i>
+                              </div>
+                            </li>
+                          ';
+                        } else {
+                        }
+                      }
+                      if ($number == 0) {
+                        echo 'No se tienen tareas pendientes';
+                      }
+                    ?>
                   </ul>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
-                  <button type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Nueva tarea</button>
+                  <small>Los cambios solo quitan las tareas de esta lista</small>
+                  <button type="button" class="btn btn-info float-right save"><i class="fas fa-save"></i> Guardar</button>
                 </div>
             </div>
           <?php 

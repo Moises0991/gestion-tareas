@@ -77,6 +77,50 @@ $(document).ready(function(){
 	});
 
 
+	// se envia formulario al dar click en el elemento que tenga la clase save
+	$(document).on("click", '.save', function(event) { 
+
+		var selected;    
+		var userId;    
+		userId = $('.userId').val();
+
+		$('li.tasks input[type=checkbox]').each(function(){
+			if (this.checked) {
+				selected = $(this).val();
+				console.log(userId);
+				$.ajax({
+					url:"chat/chat_action.php",
+					method:"POST",
+					data:{taskId:selected, userId:userId, action:'update_tasks'},
+					dataType: "json",
+					success:function(response){		
+						if(response.selected) {
+							if (response.selected == 'false'){
+								// $('li.tasks input[type=checkbox]').html(response.se);	
+								// $('.id'+selected).css('display', 'none');
+								// $('.id'+selected).html(response.selected);	
+								// alert(selected);
+							}
+						} 
+					}
+				});
+			}
+		});
+
+		$.ajax({
+			url:"chat/chat_action.php",
+			method:"POST",
+			data:{userId:userId, action:'show_tasks'},
+			dataType: "json",
+			success:function(response){		
+			console.log(userId);
+				if(response.list) {
+					$('ul.todo-list').html(response.list);	
+				} 
+			}
+		});
+	});
+
 
 	// se actualiza el is_type si se gana el foco
 	$(document).on('focus', '.message-input', function(){

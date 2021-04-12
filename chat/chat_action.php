@@ -49,6 +49,23 @@ if($_POST['action'] == 'update_unread_message') {
 	echo json_encode($data);
 }
 
+// se actualiza la lista de tareas pendientes
+if($_POST['action'] == 'update_tasks') {
+	$selected = $chat->updateTasksList($_POST['taskId'],$_POST['userId']);
+	$data = array(
+		"selected" => $selected,		
+	);
+	echo json_encode($data);
+}
+
+// se muestra la lista de tareas pendientes
+if($_POST['action'] == 'show_tasks') {
+	$list = $chat->showTaskList($_POST['userId']);
+	$data = array(
+		"list" => $list,		
+	);
+	echo json_encode($data);
+}
 
 
 if($_POST['action'] == 'update_typing_status') {

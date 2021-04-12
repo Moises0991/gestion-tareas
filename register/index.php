@@ -1,3 +1,5 @@
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <?php
     // include 'funciones.php';
 	
@@ -9,15 +11,25 @@
 	// se valida envio de formulario
     if (isset($_POST['submit'])) { 
 
-        $resultado = [
-           'error' => false,
-           'mensaje' => 'El usuario ' . $_POST['username'] . ' ha sido agregado con éxito'
-        ];
+		$config = include '../login/data/config.php';
+		$conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
+        
+		$SQL1 = "SELECT count(*) total FROM usuarios_espera";
+		$sentence1 = $conection -> query($SQL1);
+		$task1 = $sentence1 -> fetch_array(MYSQLI_ASSOC);
+       if($task1['total'] > 2){
+	
+	}else {
 
+		$resultado = [
+			'error' => false,
+			'mensaje' => 'El usuario ' . $_POST['username'] . ' ha sido agregado con éxito'
+		 ];
+		 
+		
+		
         try {
 
-			$config = include '../login/data/config.php';
-			$conection = new mysqli($host_name, $user_db, $pass_db, $db_name);
 
             // $contraseña = md5($_POST['password']);
 			$user = $_POST['username'];
@@ -31,11 +43,14 @@
 			$current_session = '1';
 			$online = '0';
 			$username = $user . ' ' . $surnames;
+			$puesto = $_POST['job'];
+			$comentario = $_POST['message'];
 
 			if ($_POST['gender']=='male') {
 				$filename = $nickname . '.jpg';
 				$source = '../chat/userpics/user5.jpg';
 				$destination = '../img/avatars/'.$filename;
+				$sexo = "Hombre";
 				if (!copy($source, $destination)) {
 					echo "Error al copiar $source...\n";
 				}
@@ -43,25 +58,18 @@
 				$filename = $nickname . '.jpg';
 				$source = '../chat/userpics/user4.jpg';
 				$destination = '../img/avatars/'.$filename;
+				$sexo = "Mujer";
 				if (!copy($source, $destination)) {
 					echo "Error al copiar $source...\n";
 				}
 			}
 
-			if(isset($_POST['job']) && $_POST['job']=='manager') {
-
-				$sql = "INSERT INTO `managers` (`nickname`, `username`, `pass_user`, `user_age`, `email`, `phone`, `avatar`, `current_session`, `online`) ";
-				$sql .= "VALUES ('$nickname', '$username', '$pass_user','$user_age', '$email', '$phone', '$filename', '$current_session', '$online')";
+	          	$sql = "INSERT INTO `usuarios_espera` (`nickname`, `username`, `pass_user`, `user_age`, `email`, `phone`, `avatar`, `puesto`, `comentarios`, `sexo`) ";
+				$sql .= "VALUES ('$nickname', '$username', '$pass_user', '$user_age', '$email', '$phone', '$filename', '$puesto', '$comentario', '$sexo')";
 				$sentence = $conection->prepare($sql);
 				$sentence->execute();
 
-			} else {
-
-				$sql = "INSERT INTO `employees` (`nickname`, `username`, `pass_user`, `user_age`, `email`, `phone`, `avatar`) ";
-				$sql .= "VALUES ('$nickname', '$username', '$pass_user', '$user_age', '$email', '$phone', '$filename')";
-				$sentence = $conection->prepare($sql);
-				$sentence->execute();
-			}
+			
 			
         } catch (PDOException $error) {
 
@@ -69,7 +77,9 @@
             $resultado['mensaje'] = $error -> getMessage();
             
         }
-    }
+	}
+	}
+    
 ?>
 
 <!--------------------------- se crea el formulario -------------------------------------->
@@ -82,41 +92,53 @@
 		<meta name="author" content="colorlib.com">
 		<link rel="stylesheet" href="fonts/material-design-iconic-font/css/material-design-iconic-font.css">
 		<link rel="stylesheet" href="css/style.css">
+
 	</head>
 	<body style="background: url('https://digitalsevilla.com/wp-content/uploads/2018/10/programa-contable-1-1080x720.jpg') 50% fixed; background-size: cover;">
 		<div class="wrapper"style="background: rgba(4, 40, 68, 0.85)" >
             <form method="post" id="wizard">
         		<!-- SECTION 1 -->
                 <h2></h2>
+																<!--  -->
+			
+<!--  -->
                 <section>
+
+					
                     <div class="inner">
 						<div class="image-holder">
 							<img src="images/form-wizard-1.jpg" style="object-fit:cover; height: 521px;" alt="">
 						</div>
+						
+
+
 						<div class="form-content" >
+		
+
 							<div class="form-header">
-								<h3>Registrarse</h3>
+						<h3>Registrarse</h3>
+
 							</div>
 							<p>Rellena con datos de usuario</p>
 							<div class="form-row">
 								<div class="form-holder">
-									<input type="text" placeholder="Nombre" class="form-control" name="username">
+									<input type="text" placeholder="Nombre" class="form-control" name="username" required pattern="[A-Za-z-ñ-Ñ]+" title="Solo se aceptan letras de la [A-Z] o [a-z]" maxlength="40">
 								</div>
 								<div class="form-holder">
-									<input type="text" placeholder="Apellidos" class="form-control" name="surnames">
-								</div>
-							</div>
-							<div class="form-row">
-								<div class="form-holder">
-									<input type="text" placeholder="Correo" class="form-control" name="email">
-								</div>
-								<div class="form-holder">
-									<input type="text" placeholder="Telefono" class="form-control" name="phone">
+									<input type="text" placeholder="Apellidos" class="form-control" name="surnames" required pattern="[A-Za-z-ñ-Ñ]+" title="Solo se aceptan letras de la [A-Z] o [a-z]" maxlength="40">
 								</div>
 							</div>
 							<div class="form-row">
 								<div class="form-holder">
-									<input type="text" placeholder="Edad" class="form-control" name="age">
+									<input type="Email" placeholder="Correo" class="form-control" name="email" required pattern="[A-Za-z0-9-ñ-Ñ ]+" title="Solo se aceptan letras de la [A-Z] o [a-z] y numeros" maxlength="40">
+								</div>
+								<div class="form-holder">
+									<input type="text" placeholder="Telefono" required pattern="[0-9 ]+" title="Solo se aceptan numeros" maxlength="10" class="form-control" name="phone">
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-holder">
+									<input type="text" placeholder="Edad" class="form-control" name="age" required pattern="[0-9]+" title="Solo se aceptan numeros" maxlength="2">
 								</div>
 								<div class="form-holder" style="align-self: flex-end; transform: translateY(4px);">
 									<div class="checkbox-tick">
@@ -154,15 +176,15 @@
 							<p>Informacion adicional</p>
 							<div class="form-row">
 								<div class="form-holder w-100">
-									<input type="text" placeholder="Nickname" class="form-control" name="nickname">
+									<input type="text" placeholder="Nickname" class="form-control" name="nickname" required pattern="[A-Za-z0-9-ñ-Ñ ]+" title="Solo se aceptan letras de la [A-Z] o [a-z] y numeros" maxlength="40">
 								</div>
 							</div>
 							<div class="form-row">
 								<div class="form-holder">
-									<input type="password" placeholder="Contraseña" class="form-control" name="password">
+									<input type="password" placeholder="Contraseña" class="form-control" name="password" required pattern="[A-Za-z0-9-ñ-Ñ ]+" title="Solo se aceptan letras de la [A-Z] o [a-z] y numeros" maxlength="40">
 								</div>
 								<div class="form-holder">
-									<input type="password" placeholder="Confirmar Contraseña" class="form-control" name="confirm_password">
+									<input type="password" placeholder="Confirmar Contraseña" class="form-control" name="confirm_password" required pattern="[A-Za-z0-9-ñ-Ñ ]+" title="Solo se aceptan letras de la [A-Z] o [a-z] y numeros" maxlength="40">
 								</div>
 							</div>
 							<div class="form-row">
@@ -172,8 +194,8 @@
 										<i class="zmdi zmdi-caret-down"></i>
 									</div>
 									<ul class="dropdown">
-										<li rel="Empleado" onclick="choice('employee')">Empleado</li>
-										<li rel="Gerente" onclick="choice('manager')">Gerente</li>
+										<li rel="Empleado" onclick="choice('Empleado')">Empleado</li>
+										<li rel="Gerente" onclick="choice('Gerente')">Gerente</li>
 										<script>
 											function choice(option) {
 												document.getElementById('job').value = option;
@@ -210,14 +232,44 @@
 									<span class="checkmark"></span>
 								</label>
 							</div>
-							<input type="submit" name="submit" value="Submit" style="background: #6d7f52; height: 41px; color: white; width: 124px; border:none">
+							<input type="submit" id="confirm" name="submit" value="Submit" style="background: #6d7f52; height: 41px; color: white; width: 124px; border:none" >
 						</div>
 					</div>
                 </section>
             </form>
+			
 		</div>
+
 		<script src="js/jquery-3.3.1.min.js"></script>
 		<script src="js/jquery.steps.js"></script>
 		<script src="js/main.js"></script>
+		
+	
 </body>
 </html>
+
+
+<?php
+if(isset($_POST['submit'])){
+if (isset($resultado)) {
+?>
+<script>	
+		
+		swal("Correcto!", "Tu solicitud, fue enviada con exito!", "success");
+</script>
+
+
+
+<?php
+}else {
+?>
+
+<script>	
+		
+		swal("Solicitud rechazada!", "Se alcanzo el limite de solicitudes!", "error");
+</script>
+
+
+<?php
+}}
+?>

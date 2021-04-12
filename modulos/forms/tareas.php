@@ -149,7 +149,7 @@ try {
                                     switch ($fila['importancia_tarea'])              
                                      {
                                       case "Baja":
-                                        $estilo="badge bg-warning";
+                                        $estilo="badge bg-purple";
 
                                         break;
                                         case "Normal":
@@ -189,7 +189,7 @@ try {
                                     switch ($fila['estado_tarea'])
                                     {
                                         case "Por hacer":
-                                          $estado="badge bg-warning";
+                                          $estado="badge bg-teal";
                                           break;
 
                                           case "En progreso":
@@ -202,7 +202,7 @@ try {
                                               break;
 
                                               case "Expirada":
-                                                $estado="badge bg-danger";
+                                                $estado="badge bg-secondary";
 
                                               
                                               

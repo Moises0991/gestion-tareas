@@ -165,7 +165,7 @@
                 
                   <div class="form-group">
                     <label>Nombre de la tarea</label>
-                    <input type="text" class="form-control" value="<?= escapar($tareas["nombre_tarea"]);?>" name="nombre" >
+                    <input maxlength="28" type="text" class="form-control" value="<?= escapar($tareas["nombre_tarea"]);?>" name="nombre" required pattern="[A-Za-z0-9-ñ-Ñ ]+" title="Solo se aceptan letras de la [A-Z] o [a-z]">
                   </div>
 
                   <div class="form-group">
@@ -187,7 +187,7 @@
 
                   <div class="form-group">
                     <label>Descripcion</label>
-                    <textarea class="form-control" rows="3" name="descripcion" placeholder="Enter ..."><?= escapar($tareas["descripcion_tarea"]);?></textarea>
+                    <textarea maxlength="500" class="form-control" rows="3" name="descripcion" placeholder="Enter ..." required pattern="[A-Za-z0-9-ñ-Ñ ]+" title="Solo se aceptan letras de la [A-Z] o [a-z]"><?= escapar($tareas["descripcion_tarea"]);?></textarea>
                   </div>
 
                   
@@ -232,13 +232,13 @@
                     <div class="col-sm-6">
                     <div class="form-group">
                        <label>Nueva fecha expira:</label>
-                           <input class="form-control" type="date" min="<?=escapar($hoy["year"]);?>-0<?=escapar($hoy["mon"]);?>-<?=escapar($hoy["mday"]);?>"  name="fecha_expira">
+                           <input class="form-control" type="date" min="<?=escapar($hoy["year"]);?>-0<?=escapar($hoy["mon"]);?>-<?=escapar($hoy["mday"]);?>"  name="fecha_expira" required pattern="[A-Za-z0-9-ñ-Ñ ]+">
                           </div>
                           </div>
                         
                     <div class="col-sm-6">
                     <label>Nueva hora expira:</label>
-                      <input class="form-control" type="time" name="hora_termina" step="" />
+                      <input class="form-control" type="time" name="hora_termina" step="" required pattern="[A-Za-z0-9-ñ-Ñ ]+" />
                           </div>
                           </div>
                 

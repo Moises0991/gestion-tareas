@@ -27,6 +27,7 @@
           'error' => false,
             'mensaje' => 'La tarea ' . escapar($_POST['nombre']) . ' ha sido creada con éxito'
          ];
+         include("../correo/dashboard.php");
             $nombre_tarea= $_POST['nombre'];
             $nombre_usuario = $_POST['usuarios'];
             $descripcion_tarea =$_POST['descripcion'];
@@ -42,12 +43,23 @@
             
              $conexion->query($consultaSQL);
 
-             $consultaSQL = "SELECT * FROM employees";
-             $sentencia = $conexion -> prepare($consultaSQL);
-             $sentencia -> execute();
-             $empleados = $sentencia -> fetchAll();
+             $consul = "SELECT *FROM employees where id = $nombre_usuario";
+             $sent = $conexion -> prepare($consul);
+             $sent-> execute();
+             $correos = $sent-> fetch(PDO::FETCH_ASSOC);
+           $correo = $correos['email'];
 
+           if(isset($_SESSION['employee'])){
+           $asignador =$correos['nickname'];
+           }else{
+
+$asignador = "Administradores";
+
+           }
+
+        captura($correo,$asignador);
         
+
     }
 
 
@@ -122,7 +134,7 @@
                 
                   <div class="form-group">
                     <label>Nombre de la tarea</label>
-                    <input type="text" class="form-control" placeholder="Enter ..." name="nombre">
+                    <input type="text" class="form-control" placeholder="Enter ..." name="nombre" required pattern="[A-Za-z0-9-ñ-Ñ ]+" title="Solo se aceptan letras de la [A-Z] o [a-z] y numeros" maxlength="28">
                   </div>
 
                   <div class="form-group">
@@ -142,7 +154,7 @@
 
                   <div class="form-group">
                     <label>Descripcion</label>
-                    <textarea class="form-control" rows="3" name="descripcion" placeholder="Enter ..."></textarea>
+                    <textarea class="form-control" rows="3" name="descripcion" placeholder="Enter ..." required pattern="[A-Za-z0-9-ñ-Ñ ]+" title="Solo se aceptan letras de la [A-Z] o [a-z] y numeros"maxlength="500" ></textarea>
                   </div>
 
                   
@@ -166,13 +178,13 @@
                     <div class="col-sm-6">
                     <div class="form-group">
                        <label>Fecha en la que expira:</label>
-                           <input class="form-control" type="date" min="<?=escapar($hoy["year"]);?>-0<?=escapar($hoy["mon"]);?>-<?=escapar($hoy["mday"]);?>"  name="fecha_expira">
+                           <input class="form-control" required pattern="[A-Za-z0-9 ]+"  type="date" min="<?=escapar($hoy["year"]);?>-0<?=escapar($hoy["mon"]);?>-<?=escapar($hoy["mday"]);?>"  name="fecha_expira">
                           </div>
                           </div>
                         
                     <div class="col-sm-6">
                     <label>Hora en la que expira:</label>
-                      <input class="form-control" type="time" name="hora_termina"/>
+                      <input class="form-control" required pattern="[A-Za-z0-9 ]+" type="time" name="hora_termina"/>
                           </div>
                          
                  </div>

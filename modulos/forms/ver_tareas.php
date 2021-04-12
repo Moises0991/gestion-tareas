@@ -405,7 +405,7 @@ if (isset($_POST['submit']) && $tareas['estado_tarea'] == "En progreso") { //el 
                           
                                      <br>   
                                         <label>Nuevo Comentario</label>
-                                        <textarea class="form-control" rows="3" name="comentario_entrega" placeholder="Enter ..."></textarea>
+                                        <textarea class="form-control" rows="3" name="comentario_entrega" placeholder="Enter ..." maxlength="499"required pattern="[A-Za-z0-9-ñ-Ñ ]+" title="Solo se aceptan letras de la [A-Z] o [a-z] y numeros"></textarea>
                                         <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
                                       
                     </form>

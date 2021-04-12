@@ -26,7 +26,8 @@ class Chat{
 	private function getData($sqlQuery) {
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
 		if(!$result){
-			die('Error in query: '. mysqli_error($conn));
+			die();
+			// die('Error in query: '. mysqli_error($conn));
 		}
 		$data= array();
 		/*while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {*/
@@ -41,7 +42,8 @@ class Chat{
 	private function getNumRows($sqlQuery) {
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
 		if(!$result){
-			die('Error in query: '. mysqli_error($conn));
+			die();
+			// die('Error in query: '. mysqli_error($conn));
 		}
 		$numRows = mysqli_num_rows($result);
 		return $numRows;
@@ -61,6 +63,17 @@ class Chat{
 		$sqlQuery = "
 			SELECT * FROM ".$this->chatUsersTable." 
 			WHERE userid != '$userid'";
+		return  $this->getData($sqlQuery);
+	}
+
+
+	public function getTasks($id){
+		$sqlQuery = " SELECT * FROM tareas_asignadas WHERE id_usuario = '$id' AND view = 'true' ";
+		return  $this->getData($sqlQuery);
+	}
+
+	public function modified_tasks($id){
+		$sqlQuery = "SELECT * FROM tareas_asignadas where id_usuario = $id and fecha_hora_expira >= now()";
 		return  $this->getData($sqlQuery);
 	}
 
@@ -121,7 +134,8 @@ class Chat{
 			VALUES ('".$reciever_userid."', '".$user_id."', '".$chat_message."', '1')";
 		$result = mysqli_query($this->dbConnect, $sqlInsert);
 		if(!$result){
-			return ('Error in query: '. mysqli_error($conn));
+			// return ('Error in query: '. mysqli_error($conn));
+			return ('Error in query: ');
 		} else {
 			$conversation = $this->getUserChat($user_id, $reciever_userid);
 			$data = array(
@@ -250,6 +264,85 @@ class Chat{
 		return $output;
 	}	
 
+
+	public function updateTasksList($id, $userId) {
+		$sqlUpdateTask = "
+			UPDATE tareas_asignadas 
+			SET view = 'false' 
+			WHERE id = '".$id."'";			
+		mysqli_query($this->dbConnect, $sqlUpdateTask);		
+
+		$sqlQuery = "
+			SELECT * FROM tareas_asignadas  
+			WHERE id = '$id' AND view = 'false' ";
+		// $task = mysqli_query($this->dbConnect, $sqlQuery);
+		// $row = mysqli_fetch_assoc ($task);
+		// if ($row['view'] == 'false') {
+		// 	return 'false';
+		// } else {
+		// 	return 'true';
+		// }
+	}	
+
+	public function showTaskList($userId) {
+
+		$sqlQuery = " SELECT * FROM tareas_asignadas WHERE id_usuario = '$userId' AND view = 'true' ";
+		// $tasks = mysqli_query($this->dbConnect, $sqlQuery);
+		$tasks = $this->getData($sqlQuery);	
+
+		$number = 0;
+		$importance = '';
+		$style = '';
+		$list = '';
+
+		foreach ($tasks as $task) {
+
+			if (!($task['estado_tarea'] == 'Terminada' || $task['estado_tarea'] == 'Expirada')) {
+
+				switch ($task['importancia_tarea']) {
+				case "Baja": $style = "badge bg-purple"; $importance = 'baja'; break;
+				case "Normal": $style = "badge bg-success"; $importance = 'nomal'; break;
+				case "Alta": $style = "badge bg-warning"; $importance = 'alta'; break;
+				case "Urgente": $style = "badge bg-orange"; $importance = 'urgente'; break;
+				case "Inmediata": $style = "badge bg-danger"; $importance = 'inmediata'; break;
+				}
+
+				$number++;
+
+				$list .= '
+				<li class="tasks id'.$task['id'].'">
+					<!-- drag handle -->
+					<span class="handle">
+					<i class="fas fa-ellipsis-v"></i>
+					<i class="fas fa-ellipsis-v"></i>
+					</span>
+					<!-- checkbox -->
+					<div  class="icheck-primary d-inline ml-2">
+					<input type="checkbox" value="'.$task['id'].'" name="todo'.$number.'" id="todoCheck'.$number.'">
+					<input type="hidden" class="userId" value="'.$task['id_usuario'].'">
+					<label for="todoCheck'.$number.'"></label>
+					</div>
+					<!-- todo text -->
+					<span class="text">'.$task['nombre_tarea'].'</span>
+					<!-- Emphasis label -->
+					<small class="'.$style.'" style="text-transform:capitalize"><i class="far fa-clock"></i> '.$importance.'</small>
+					<!-- General tools such as edit or delete-->
+					<div class="tools">
+					<i class="fas fa-edit"></i>
+					<i class="fas fa-trash-o"></i>
+					</div>
+				</li>
+				';
+
+			} else {
+			}
+		}
+		if ($number == 0){
+			return 'No se tienen tareas por hacer';
+		} else {
+			return $list;
+		}
+	}	
 	
 	// retorna el ultimo mensaje de una conversacion
 	public function getLatestMessage($senderUserid, $recieverUserid, $type) {

@@ -6,11 +6,11 @@ CREATE TABLE managers (
   -- UNSIGNED sirve para permitir solo valores positivos (sin signo)
   -- userid int(11) NOT NULL,
   userid INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-  nickname VARCHAR(30) NOT NULL,
-  username VARCHAR(40) NOT NULL,
+  nickname VARCHAR(80) NOT NULL,
+  username VARCHAR(80) NOT NULL,
   pass_user VARCHAR(50) NOT NULL,
   user_age INT(2) UNSIGNED NOT NULL, 
-  email VARCHAR(30) NOT NULL,
+  email VARCHAR(80) NOT NULL,
   phone BIGINT(55) UNSIGNED NOT NULL, 
   avatar varchar(255) NOT NULL,
   current_session int(11) NOT NULL,
@@ -28,11 +28,11 @@ INSERT INTO managers (nickname, username, pass_user, user_age, email, phone, ava
 CREATE TABLE employees (
     -- UNSIGNED sirve para permitir solo valores positivos (sin signo)
     id INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-    nickname VARCHAR(30) NOT NULL,
-    username VARCHAR(40) NOT NULL,
-    pass_user VARCHAR(50) NOT NULL,
+    nickname VARCHAR(80) NOT NULL,
+    username VARCHAR(80) NOT NULL,
+    pass_user VARCHAR(80) NOT NULL,
     user_age INT(2) UNSIGNED NOT NULL, 
-    email VARCHAR(30) NOT NULL,
+    email VARCHAR(80) NOT NULL,
     phone BIGINT(55) UNSIGNED NOT NULL, 
     avatar varchar(255) NOT NULL,
     -- TIMESTAMP es un tipo de dato que contiene fecha y hora
@@ -41,8 +41,8 @@ CREATE TABLE employees (
     create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 );
-INSERT INTO employees (nickname, username, pass_user, user_age, email, phone, avatar) values ('ramona0991', 'ramona salazar mendiola', 'soler', '21', 'ramona@gmail.com', '9988674739','ramona0991.jpg');
-INSERT INTO employees (nickname, username, pass_user, user_age, email, phone, avatar) values ('raul0991', 'raul cordoba medina', 'raul', '22', 'raul@gmail.com', '9981497748','raul0991.jpg');
+INSERT INTO employees (nickname, username, pass_user, user_age, email, phone, avatar) values ('ramona0991', 'ramona salazar mendiola', 'soler', '21', 'ramona0991@gmail.com', '9988674739','ramona0991.jpg');
+INSERT INTO employees (nickname, username, pass_user, user_age, email, phone, avatar) values ('raul0991', 'raul cordoba medina', 'raul', '22', 'hector.valencia0605@gmail.com', '9981497748','raul0991.jpg');
 
 
 -- creacion de tablas para chat
@@ -103,6 +103,7 @@ CREATE TABLE tareas_asignadas (
   descripcion_tarea VARCHAR(500) NOT NULL,
   importancia_tarea VARCHAR(20)  NOT NULL, 
   estado_tarea varchar(20) NOT NULL,
+  view text(100),
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   fecha_hora_expira TIMESTAMP,
   fecha_expira VARCHAR(10) NOT NULL,
@@ -141,3 +142,24 @@ id_tareas int(12)not null,
     constraint fk_id_tareas foreign KEY (id_tareas)
     REFERENCES tareas_asignadas(id)
     );
+
+
+    CREATE TABLE usuarios_espera (
+    -- UNSIGNED sirve para permitir solo valores positivos (sin signo)
+    id INT(12) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+    nickname VARCHAR(80) NOT NULL,
+    username VARCHAR(80) NOT NULL,
+    pass_user VARCHAR(50) NOT NULL,
+    user_age INT(2) UNSIGNED NOT NULL, 
+    email VARCHAR(80) NOT NULL,
+    phone BIGINT(55) UNSIGNED NOT NULL, 
+    avatar varchar(255) NOT NULL,
+     puesto VARCHAR(40) NOT NULL,
+     comentarios VARCHAR(600) NOT NULL,
+      sexo VARCHAR(40) NOT NULL,
+
+    -- TIMESTAMP es un tipo de dato que contiene fecha y hora
+    -- La función CURRENT_TIMESTAMP devuelve la fecha y la hora local actual 
+    create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+);
