@@ -251,7 +251,7 @@ try {
                                         <td ><span style=" margin-left: 15px;"class="<?=escapar($estilo);?>"><?=escapar($fila["importancia_tarea"]);?></span></td>
                                         <td ><span style=" margin-left: 30px; "  class="<?=escapar($estado);?>"><?=escapar($fila["estado_tarea"]);?></span></td>
                                         
-                                        <td >  <a href="<?= 'ver_tareas.php?id=' . escapar($fila["id_tareas"]) ?>">️️<button type="button" class="btn btn-info ">Ver tarea</button></a></span></td>   
+                                      <td >  <a href="<?= 'ver_tareas.php?id=' . escapar($fila["id_tareas"]) ?>">️️<button type="button" class="btn btn-info ">Ver tarea</button></a></span></td>   
                                      
                                      <?php
 

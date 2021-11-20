@@ -19,13 +19,16 @@
 
 
   if (isset($_SESSION['manager'])) {
+
     $username = $_SESSION['username'];
     $nickname = $_SESSION['manager'];
     $sql = "SELECT * FROM managers WHERE nickname = '$nickname'";
     $query = $conection -> query($sql);
     $row = $query -> fetch_array(MYSQLI_ASSOC);
-    $task_type = array("Normal", "Alta", "Urgente", "inmediata");
-    for ($i = 0; $i <= 3; $i++) {
+    $task_type = array("Normal", "Alta", "Urgente", "inmediata");    
+
+    for ($i = 0; $i <= 3; $i++) {      
+
       $type_a = $task_type[$i];
       $sql1 = "SELECT count(*) total FROM tareas_asignadas where importancia_tarea = '$type_a' ";
       $sentence1 = $conection -> query($sql1);
@@ -33,10 +36,11 @@
       if($i==0){$tipo_normal = $task1["total"];}
       if($i==1){$tipo_alta = $task1["total"];}
       if($i==2){$tipo_urgente = $task1["total"];}
-      if($i==3){$tipo_inmediata = $task1["total"];}
+      if($i==3){$tipo_inmediata = $task1["total"];}      
     }
 
-  } else if (isset($_SESSION['employee'])) {
+  } else if (isset($_SESSION['employee'])) {    
+
     $username = $_SESSION['username'];
     $nickname = $_SESSION['employee'];
     $sql = "SELECT * FROM employees WHERE nickname = '$nickname'";
@@ -51,8 +55,10 @@
 
     $id = $_SESSION["id_employee"];
 
-    $task_type = array("Normal", "Alta", "Urgente", "inmediata");
+    $task_type = array("Normal", "Alta", "Urgente", "inmediata");    
+    
     for ($i = 0; $i <= 3; $i++) {
+      
       $type_a = $task_type[$i];
       $sql1 = "SELECT count(*) total FROM tareas_asignadas where id_usuario = $id and importancia_tarea = '$type_a' ";
       $sentence1 = $conection -> query($sql1);

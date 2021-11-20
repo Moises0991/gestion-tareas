@@ -215,9 +215,7 @@ function sendMessage(to_user_id) {
 	$.ajax({
 		url:"chat/chat_action.php",
 		method:"POST",
-		data:{to_user_id:to_user_id,
-			chat_message:message,
-			action:'insert_chat'},
+		data:{to_user_id:to_user_id, chat_message:message, action:'insert_chat'},
 		dataType: "json",
 		success:function(response) {
 			var resp = $.parseJSON(response);			
